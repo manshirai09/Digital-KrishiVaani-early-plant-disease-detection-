@@ -1,3 +1,6 @@
+🌱 Digital KrishiVaani
+
+
 <p align="center"> <img src="assets/digital-krishivaani-animation.gif" width="280" alt="Digital KrishiVaani"> </p>
 
 <p align="center"> <img src="https://readme-typing-svg.demolab.com?font=Montserrat&weight=600&size=22&pause=1000&color=2E7D32&center=true&vCenter=true&width=700&lines=AI-Powered+Early+Plant+Disease+Detection;Smart+Crop+Health+Monitoring;Weather-Based+Risk+Forecasting;Multilingual+Voice+Assistant+%E2%80%93+VAANI" alt="Typing Animation"> </p>
