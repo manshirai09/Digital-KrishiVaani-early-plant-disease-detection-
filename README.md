@@ -1,4 +1,4 @@
-# 🌱 Digital KrishiVaani
+<h1 align="center">🌱 Digital KrishiVaani</h1>
 
 <p align="center">
   <img src="assets/digital-krishivaani-animation.gif" width="300" alt="Digital KrishiVaani Animation">
