@@ -1,12 +1,7 @@
-🌱 Digital KrishiVaani
+#🌱 Digital KrishiVaani
 <p align="center">
   <img src="assets/digital-krishivaani-animation.gif" width="300" alt="Digital KrishiVaani Animation">
 </p>
-
-<p align="center">
-  <strong>AI-Powered Early Plant Disease Detection & Smart Crop Health Advisory</strong>
-</p>
-
 
 <p align="center"> <img src="assets/digital-krishivaani-animation.gif" width="280" alt="Digital KrishiVaani"> </p>
 
