@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" fill="none">
+  <defs>
+    <!-- Protective Shield Gradient -->
+    <linearGradient id="crescentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#064e3b" />
+      <stop offset="50%" stopColor="#065f46" />
+      <stop offset="100%" stopColor="#047857" />
+    </linearGradient>
+
+    <!-- Right Leaf Dark Side (Left of Midrib) -->
+    <linearGradient id="leafRightDark" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#047857" />
+      <stop offset="40%" stopColor="#059669" />
+      <stop offset="100%" stopColor="#10b981" />
+    </linearGradient>
+
+    <!-- Right Leaf Light Side (Right of Midrib) -->
+    <linearGradient id="leafRightLight" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#10b981" />
+      <stop offset="50%" stopColor="#34d399" />
+      <stop offset="100%" stopColor="#84cc16" />
+    </linearGradient>
+
+    <!-- Left Leaf Gradients -->
+    <linearGradient id="leafLeftTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#4ade80" />
+      <stop offset="60%" stopColor="#22c55e" />
+      <stop offset="100%" stopColor="#16a34a" />
+    </linearGradient>
+    <linearGradient id="leafLeftBottom" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#15803d" />
+      <stop offset="60%" stopColor="#166534" />
+      <stop offset="100%" stopColor="#14532d" />
+    </linearGradient>
+
+    <!-- Field Furrow Gradients -->
+    <linearGradient id="furrow1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#065f46" />
+      <stop offset="100%" stopColor="#047857" />
+    </linearGradient>
+    <linearGradient id="furrow2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#059669" />
+      <stop offset="100%" stopColor="#10b981" />
+    </linearGradient>
+    <linearGradient id="furrow3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#10b981" />
+      <stop offset="100%" stopColor="#34d399" />
+    </linearGradient>
+    <linearGradient id="furrowRight1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#84cc16" />
+      <stop offset="100%" stopColor="#65a30d" />
+    </linearGradient>
+    <linearGradient id="furrowRight2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#22c55e" />
+      <stop offset="100%" stopColor="#16a34a" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Protective Outer Crescent Shield -->
+  <path d="M 178 332 C 122 418 80 514 80 620 C 80 770 195 860 480 860 C 645 860 785 810 938 645 C 895 725 765 808 515 808 C 265 808 148 718 148 585 C 148 495 170 415 220 350 Z" fill="url(#crescentGrad)" />
+
+  <!-- 2. Central Sprout Stem -->
+  <path d="M 552 575 C 555 540 550 515 545 480 C 538 515 536 540 538 575 Z" fill="#065f46" />
+
+  <!-- 3. Right Dominant Leaf (Two halves with central midrib) -->
+  <!-- Left half of right leaf -->
+  <path d="M 545 480 C 585 360 675 240 930 125 C 810 240 680 360 545 480 Z" fill="url(#leafRightDark)" />
+  <!-- Right half of right leaf -->
+  <path d="M 545 480 C 680 360 810 240 930 125 C 950 240 860 380 720 480 C 660 520 590 500 545 480 Z" fill="url(#leafRightLight)" />
+
+  <!-- 4. Left Branching Leaf (Two halves with midrib) -->
+  <!-- Upper half of left leaf -->
+  <path d="M 535 490 C 470 380 390 340 272 332 C 340 400 440 460 535 490 Z" fill="url(#leafLeftTop)" />
+  <!-- Lower half of left leaf -->
+  <path d="M 535 490 C 440 460 340 400 272 332 C 330 460 420 500 515 505 Z" fill="url(#leafLeftBottom)" />
+
+  <!-- 5. Agricultural Field Furrow Rows (Tiered Contour Layers) -->
+  <!-- Top Left Furrow -->
+  <path d="M 168 582 C 300 575 480 575 628 582 C 600 605 450 600 182 605 Z" fill="#16a34a" />
+
+  <!-- Second Tier Furrow -->
+  <path d="M 188 616 C 350 612 520 612 660 622 C 625 648 440 640 215 648 Z" fill="url(#furrow2)" />
+
+  <!-- Third Tier Furrow -->
+  <path d="M 224 660 C 390 655 580 660 765 735 C 720 765 520 705 260 705 Z" fill="url(#furrow1)" />
+
+  <!-- Fourth Tier Furrow (Lowest Base) -->
+  <path d="M 275 720 C 420 720 580 760 700 805 C 620 825 450 780 330 770 Z" fill="#064e3b" />
+
+  <!-- Right Perspective Plot 1 (Top Right terraced contour) -->
+  <path d="M 645 585 C 740 580 840 575 938 585 C 910 608 810 605 690 608 Z" fill="url(#furrowRight1)" />
+
+  <!-- Right Perspective Plot 2 (Mid Right contour) -->
+  <path d="M 708 618 C 790 618 870 618 930 610 C 910 632 820 645 745 645 Z" fill="url(#furrowRight2)" />
+
+  <!-- Right Perspective Plot 3 (Lower Right diagonal plot) -->
+  <path d="M 760 655 C 830 655 890 650 918 640 C 890 670 820 685 798 700 Z" fill="#15803d" />
+</svg>

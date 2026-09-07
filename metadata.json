@@ -1,0 +1,12 @@
+{
+  "name": "Digital KrishiVaani",
+  "description": "Your AI Krishi Saathi - AI Crop Health Early Warning, Disease Detection, Weather Risk & Decision Support Platform for Indian Farmers",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
