@@ -1,0 +1,234 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <!-- Background Cardboard/Table surface -->
+    <radialGradient id="bgGrad" cx="45%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#938173"/>
+      <stop offset="35%" stop-color="#887669"/>
+      <stop offset="70%" stop-color="#766456"/>
+      <stop offset="100%" stop-color="#5f4e42"/>
+    </radialGradient>
+
+    <!-- Deep Green Center Lamina -->
+    <radialGradient id="leafCenter" cx="49%" cy="40%" r="58%">
+      <stop offset="0%" stop-color="#143610"/>
+      <stop offset="30%" stop-color="#1c4717"/>
+      <stop offset="55%" stop-color="#2a5d20"/>
+      <stop offset="75%" stop-color="#4d7927"/>
+      <stop offset="90%" stop-color="#8ea82d"/>
+      <stop offset="100%" stop-color="#c1d942"/>
+    </radialGradient>
+
+    <!-- Yellow-Green Chlorotic Upward Margins Left -->
+    <linearGradient id="curlRimLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c8dc43"/>
+      <stop offset="40%" stop-color="#abc631"/>
+      <stop offset="80%" stop-color="#5b7e21"/>
+      <stop offset="100%" stop-color="#224816"/>
+    </linearGradient>
+
+    <!-- Yellow-Green Chlorotic Upward Margins Right -->
+    <linearGradient id="curlRimRight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d4e64b"/>
+      <stop offset="40%" stop-color="#b4cf36"/>
+      <stop offset="80%" stop-color="#658824"/>
+      <stop offset="100%" stop-color="#264c18"/>
+    </linearGradient>
+
+    <!-- Basal curled lobe -->
+    <linearGradient id="basalCup" x1="20%" y1="100%" x2="80%" y2="0%">
+      <stop offset="0%" stop-color="#698522"/>
+      <stop offset="50%" stop-color="#a8c534"/>
+      <stop offset="80%" stop-color="#3c611d"/>
+      <stop offset="100%" stop-color="#193b11"/>
+    </linearGradient>
+
+    <!-- Petiole Base -->
+    <linearGradient id="petioleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#738b30"/>
+      <stop offset="60%" stop-color="#9eb641"/>
+      <stop offset="100%" stop-color="#546522"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Textured Background Canvas -->
+  <rect width="600" height="600" fill="url(#bgGrad)"/>
+
+  <!-- Cardboard fiber speckles -->
+  <g opacity="0.3" stroke="#e0d4c8" stroke-width="0.8" stroke-linecap="round">
+    <line x1="50" y1="80" x2="62" y2="84"/>
+    <line x1="110" y1="510" x2="124" y2="506"/>
+    <line x1="510" y1="150" x2="522" y2="156"/>
+    <line x1="530" y1="460" x2="540" y2="455"/>
+    <line x1="210" y1="60" x2="222" y2="63"/>
+    <line x1="450" y1="550" x2="462" y2="547"/>
+    <line x1="75" y1="320" x2="84" y2="328"/>
+    <line x1="535" y1="280" x2="544" y2="286"/>
+  </g>
+  <g opacity="0.25" stroke="#1f150d" stroke-width="0.9" stroke-linecap="round">
+    <line x1="160" y1="190" x2="167" y2="200"/>
+    <line x1="480" y1="285" x2="490" y2="293"/>
+    <line x1="90" y1="330" x2="100" y2="336"/>
+    <line x1="400" y1="85" x2="410" y2="90"/>
+    <line x1="260" y1="540" x2="270" y2="544"/>
+    <line x1="430" y1="480" x2="438" y2="488"/>
+  </g>
+
+  <!-- Deep Soft Organic Shadow Beneath Leaf -->
+  <path d="M 315 485 C 290 487, 245 478, 212 450 C 178 420, 152 382, 130 334 C 112 293, 118 258, 148 238 C 162 228, 175 228, 185 231 C 164 200, 162 166, 180 138 C 194 116, 218 103, 246 100 C 258 84, 274 58, 291 32 C 307 58, 323 84, 336 100 C 364 103, 388 116, 402 140 C 420 168, 416 203, 395 233 C 405 230, 418 230, 432 240 C 460 262, 468 298, 448 340 C 424 386, 398 422, 364 450 C 334 478, 308 486, 315 485 Z"
+        fill="#261b13"
+        opacity="0.35"
+        transform="translate(18, 26) scale(1.02)"/>
+  <path d="M 315 485 C 290 487, 245 478, 212 450 C 178 420, 152 382, 130 334 C 112 293, 118 258, 148 238 C 162 228, 175 228, 185 231 C 164 200, 162 166, 180 138 C 194 116, 218 103, 246 100 C 258 84, 274 58, 291 32 C 307 58, 323 84, 336 100 C 364 103, 388 116, 402 140 C 420 168, 416 203, 395 233 C 405 230, 418 230, 432 240 C 460 262, 468 298, 448 340 C 424 386, 398 422, 364 450 C 334 478, 308 486, 315 485 Z"
+        fill="#1a110a"
+        opacity="0.5"
+        transform="translate(8, 12) scale(1.01)"/>
+
+  <!-- Basal Stem Petiole -->
+  <path d="M 318 472 C 324 496, 332 520, 345 540 C 350 547, 357 550, 361 545 C 365 540, 362 528, 354 514 C 343 495, 335 474, 329 455 Z"
+        fill="url(#petioleGrad)"/>
+
+  <!-- Main Tomato Leaf Blade Silhouette -->
+  <!-- Authentic Tomato Leaflet Lobes with Upward Curled Morphology -->
+  <path d="M 312 470
+           C 285 472, 250 464, 216 434
+           C 180 404, 154 366, 130 316
+           C 110 274, 118 236, 150 216
+           C 165 205, 178 205, 190 209
+           C 166 174, 164 138, 184 108
+           C 200 84, 226 70, 256 66
+           C 270 50, 286 24, 304 -2
+           C 320 24, 338 50, 352 66
+           C 382 70, 408 84, 424 108
+           C 444 138, 438 174, 414 209
+           C 426 205, 440 205, 455 216
+           C 486 238, 494 274, 474 318
+           C 450 366, 422 404, 388 434
+           C 352 464, 322 472, 312 470 Z"
+        fill="url(#leafCenter)"
+        transform="translate(-6, 20)"/>
+
+  <!-- Curled Left Rim (Upward Infolded Chlorotic Edge) -->
+  <path d="M 298 18
+           C 280 44, 264 70, 250 86
+           C 220 90, 194 104, 178 128
+           C 158 158, 160 194, 184 229
+           C 172 225, 158 225, 144 236
+           C 112 256, 104 294, 124 336
+           C 148 386, 174 424, 210 454
+           C 232 436, 208 392, 192 350
+           C 172 304, 166 266, 188 234
+           C 202 214, 222 204, 228 178
+           C 234 144, 242 120, 266 96
+           C 282 76, 292 48, 298 18 Z"
+        fill="url(#curlRimLeft)"
+        opacity="0.95"/>
+
+  <!-- Curled Right Rim (Upward Infolded Chlorotic Edge) -->
+  <path d="M 298 18
+           C 316 44, 332 70, 346 86
+           C 376 90, 402 104, 418 128
+           C 438 158, 432 194, 408 229
+           C 420 225, 434 225, 448 236
+           C 480 256, 488 294, 468 336
+           C 444 386, 416 424, 382 454
+           C 360 436, 384 392, 400 350
+           C 420 304, 426 266, 404 234
+           C 390 214, 370 204, 364 178
+           C 358 144, 350 120, 326 96
+           C 310 76, 302 48, 298 18 Z"
+        fill="url(#curlRimRight)"
+        opacity="0.95"/>
+
+  <!-- Distinct Basal Upward Curled Leaflet Pocket (TYLCV Signature) -->
+  <path d="M 195 430
+           C 225 470, 268 490, 312 488
+           C 345 488, 388 470, 415 432
+           C 388 410, 348 440, 312 442
+           C 270 440, 226 408, 195 430 Z"
+        fill="url(#basalCup)"
+        opacity="0.96"/>
+
+  <!-- Thick Primary Midrib (Vein) -->
+  <path d="M 298 24
+           C 297 100, 300 178, 303 256
+           C 306 334, 303 410, 312 482"
+        stroke="#8aa828"
+        stroke-width="5.5"
+        stroke-linecap="round"
+        fill="none"/>
+  <path d="M 298 24
+           C 297 100, 300 178, 303 256
+           C 306 334, 303 410, 312 482"
+        stroke="#c4db3e"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        fill="none"
+        opacity="0.85"/>
+
+  <!-- Secondary Lateral Veins -->
+  <g stroke="#84a425" stroke-linecap="round" fill="none" opacity="0.9">
+    <!-- Left Veins -->
+    <path d="M 300 95 C 274 112, 244 126, 214 138" stroke-width="2.8"/>
+    <path d="M 301 160 C 265 180, 226 200, 186 216" stroke-width="3.2"/>
+    <path d="M 303 234 C 260 258, 218 284, 170 308" stroke-width="3.4"/>
+    <path d="M 304 310 C 262 336, 220 370, 174 404" stroke-width="3"/>
+    <path d="M 306 385 C 272 412, 238 442, 206 466" stroke-width="2.6"/>
+
+    <!-- Right Veins -->
+    <path d="M 300 95 C 326 112, 356 126, 386 138" stroke-width="2.8"/>
+    <path d="M 301 160 C 337 180, 376 200, 416 216" stroke-width="3.2"/>
+    <path d="M 303 234 C 346 258, 388 284, 436 308" stroke-width="3.4"/>
+    <path d="M 304 310 C 346 336, 388 370, 434 404" stroke-width="3"/>
+    <path d="M 306 385 C 340 412, 374 442, 406 466" stroke-width="2.6"/>
+
+    <!-- Reticulate Micro-veinlets -->
+    <path d="M 260 188 C 242 206, 228 226, 206 236" stroke-width="1.6"/>
+    <path d="M 250 268 C 230 290, 208 312, 184 326" stroke-width="1.8"/>
+    <path d="M 245 348 C 222 372, 200 394, 178 410" stroke-width="1.6"/>
+
+    <path d="M 342 188 C 360 206, 374 226, 396 236" stroke-width="1.6"/>
+    <path d="M 352 268 C 372 290, 394 312, 418 326" stroke-width="1.8"/>
+    <path d="M 357 348 C 380 372, 402 394, 424 410" stroke-width="1.6"/>
+  </g>
+
+  <!-- Puckered / Wrinkled Interveinal Rugosity Blisters -->
+  <g fill="#cbe040" opacity="0.34">
+    <ellipse cx="258" cy="145" rx="14" ry="9" transform="rotate(-15 258 145)"/>
+    <ellipse cx="344" cy="145" rx="14" ry="9" transform="rotate(15 344 145)"/>
+    <ellipse cx="242" cy="216" rx="18" ry="11" transform="rotate(-20 242 216)"/>
+    <ellipse cx="360" cy="216" rx="18" ry="11" transform="rotate(20 360 216)"/>
+    <ellipse cx="234" cy="290" rx="22" ry="13" transform="rotate(-25 234 290)"/>
+    <ellipse cx="370" cy="290" rx="22" ry="13" transform="rotate(25 370 290)"/>
+    <ellipse cx="238" cy="365" rx="20" ry="12" transform="rotate(-20 238 365)"/>
+    <ellipse cx="364" cy="365" rx="20" ry="12" transform="rotate(20 364 365)"/>
+  </g>
+
+  <!-- Moisture and Leaflet Surface Highlights -->
+  <g fill="#ffffff" opacity="0.28">
+    <circle cx="286" cy="110" r="2.8"/>
+    <circle cx="310" cy="132" r="2.5"/>
+    <circle cx="254" cy="210" r="3.4"/>
+    <circle cx="348" cy="222" r="3.6"/>
+    <circle cx="246" cy="280" r="4.0"/>
+    <circle cx="356" cy="292" r="3.8"/>
+    <circle cx="274" cy="355" r="2.8"/>
+    <circle cx="328" cy="350" r="2.8"/>
+    <circle cx="262" cy="415" r="3.2"/>
+    <circle cx="338" cy="420" r="3.2"/>
+  </g>
+
+  <!-- Golden Marginal Glow Stroke for Vibrant Chlorosis -->
+  <path d="M 298 20
+           C 270 60, 242 90, 195 130
+           C 162 165, 146 215, 138 270
+           C 130 320, 146 370, 182 410
+           C 215 444, 262 470, 302 472
+           C 342 470, 390 444, 422 410
+           C 458 370, 474 320, 466 270
+           C 458 215, 442 165, 409 130
+           C 362 90, 334 60, 298 20 Z"
+        fill="none"
+        stroke="#d6e847"
+        stroke-width="12"
+        opacity="0.32"/>
+</svg>

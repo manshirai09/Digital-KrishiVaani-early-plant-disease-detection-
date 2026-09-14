@@ -8,7 +8,9 @@ import {
   NotificationItem,
   DemoScenario,
   FieldVisit,
-  FollowUpRecord
+  FollowUpRecord,
+  Dataset,
+  DatasetImage
 } from '../types';
 
 export const INITIAL_WEATHER: WeatherData = {
@@ -67,7 +69,7 @@ export const INITIAL_PEST_TRAPS: PestTrapData[] = [
       { date: 'Yesterday', count: 14 },
       { date: 'Today', count: 18 },
     ],
-    trapImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=400&q=80'
+    trapImageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/34/CSIRO_ScienceImage_7848_Aphids_on_cotton_8.jpg'
   },
   {
     trapId: 'TRAP-02-DEPALPUR',
@@ -221,7 +223,7 @@ export const INITIAL_CASES: CaseRecord[] = [
     variety: 'BG-II Bt Hybrid',
     stage: 'Flowering',
     confidence: 62,
-    imageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    imageUrl: '/TomatoYellowCurlVirus1.JPG.jpeg',
     timestamp: '2026-08-29 09:15 AM',
     dateCreated: '2026-08-29 09:15 AM',
     status: 'pending_expert',
@@ -253,7 +255,7 @@ export const INITIAL_CASES: CaseRecord[] = [
       confidence: 62,
       severityPercent: 42,
       severityLevel: 'high',
-      sampleImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: '/TomatoYellowCurlVirus1.JPG.jpeg',
       symptomPattern: 'Concentric necrotic circular lesions on mid-canopy leaves with reddish borders',
       isSimulated: true,
       needsExpertReview: true,
@@ -500,7 +502,7 @@ export const INITIAL_CASES: CaseRecord[] = [
     variety: 'BG-II Bt Hybrid',
     stage: 'Flowering',
     confidence: 88,
-    imageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    imageUrl: '/cotton_leaf_spot.svg',
     timestamp: '2026-08-21 11:40 AM',
     dateCreated: '2026-08-21 11:40 AM',
     status: 'expert_approved',
@@ -527,7 +529,7 @@ export const INITIAL_CASES: CaseRecord[] = [
       confidence: 88,
       severityPercent: 18,
       severityLevel: 'moderate',
-      sampleImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: '/cotton_leaf_spot.svg',
       symptomPattern: 'Angular water-soaked spots bounded by leaf veinlets with slight chlorotic halos.',
       isSimulated: false,
       needsExpertReview: false,
@@ -583,7 +585,7 @@ export const INITIAL_CASES: CaseRecord[] = [
     variety: 'BG-II Bt Hybrid',
     stage: 'Vegetative',
     confidence: 86,
-    imageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    imageUrl: '/cotton_leaf_spot.svg',
     timestamp: '2026-08-12 10:10 AM',
     dateCreated: '2026-08-12 10:10 AM',
     status: 'expert_confirmed',
@@ -611,7 +613,7 @@ export const INITIAL_CASES: CaseRecord[] = [
       confidence: 86,
       severityPercent: 34,
       severityLevel: 'high',
-      sampleImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: '/cotton_leaf_spot.svg',
       symptomPattern: 'Initial red-brown circular spots on lower vegetative foliage with clear center drop-out.',
       isSimulated: false,
       needsExpertReview: true,
@@ -729,7 +731,7 @@ export const INITIAL_FOLLOW_UPS: FollowUpRecord[] = [
     initialScanDate: '2026-08-12',
     initialSeverity: 34,
     initialRiskScore: 78,
-    initialImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    initialImageUrl: '/cotton_leaf_spot.svg',
     followUpDate: '2026-08-26',
     followUpSeverity: 12,
     followUpRiskScore: 39,
@@ -938,7 +940,7 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     severity: 34,
     riskScore: 78,
     requiresExpert: false,
-    sampleImage: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    sampleImage: '/cotton_leaf_spot.svg',
     leafType: 'Cotton Foliage with Brown Necrotic Rings',
     notes: 'Demonstrates confident AI screening with pre-approved cultural & biological advisory.'
   },
@@ -953,7 +955,7 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     severity: 42,
     riskScore: 82,
     requiresExpert: true,
-    sampleImage: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    sampleImage: '/cotton_leaf_spot.svg',
     leafType: 'Irregular chlorotic leaf spots with leaf curl',
     notes: 'Demonstrates human-in-the-loop expert review preventing AI hallucination in critical farming.'
   },
@@ -968,7 +970,7 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     severity: 48,
     riskScore: 84,
     requiresExpert: true,
-    sampleImage: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+    sampleImage: 'https://upload.wikimedia.org/wikipedia/commons/3/34/CSIRO_ScienceImage_7848_Aphids_on_cotton_8.jpg',
     leafType: 'Soybean leaf underside with aphid clusters & honeydew',
     notes: 'Demonstrates multi-source early warning combining physical IoT traps with AI vision.'
   },
@@ -986,5 +988,488 @@ export const DEMO_SCENARIOS: DemoScenario[] = [
     sampleImage: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80',
     leafType: 'Healthy green canopy with healed lesion scars',
     notes: 'Demonstrates closed-loop verification and dataset accumulation for continuous model retraining.'
+  }
+];
+
+export const INITIAL_DATASETS: Dataset[] = [
+  {
+    id: 'DS-SOYBEAN-RUST-2026',
+    name: 'Central India Soybean Rust & Cercospora Benchmark',
+    description: 'High-resolution in-situ leaf dataset capturing Asian Soybean Rust (Phakopsora pachyrhizi), Cercospora leaf spot, and healthy controls across the Malwa Plateau.',
+    crop: 'Soybean',
+    targetDiseases: ['Asian Soybean Rust', 'Cercospora Leaf Spot', 'Yellow Mosaic Virus', 'Healthy Foliage'],
+    season: 'Kharif 2026',
+    region: 'Indore & Malwa Plateau, MP',
+    imageCount: 4,
+    annotatedCount: 4,
+    verifiedCount: 4,
+    createdAt: '2026-08-15',
+    updatedAt: '2026-09-08',
+    status: 'retraining_ready',
+    author: 'ICAR-IISR Indore & KrishiRakshak AI Lab',
+    tags: ['Field Benchmark', 'High-Res In-Situ', 'Ground Truth Validated', 'AI Retraining Ready'],
+    coverImage: 'https://images.unsplash.com/photo-1592417817098-8f3d69102a47?auto=format&fit=crop&w=600&q=80',
+    modelAccuracyBaseline: 91.4,
+    modelRetrainedAccuracy: 96.8
+  },
+  {
+    id: 'DS-COTTON-CURL-2026',
+    name: 'Cotton Whitefly, Leaf Curl & Bacterial Blight Archive',
+    description: 'Curated field imagery of Bt-2 and indigenous desi cotton cultivars with whitefly nymphs, leaf curl virus upward curling, and bacterial angular blight lesions.',
+    crop: 'Cotton',
+    targetDiseases: ['Cotton Leaf Curl Virus (CLCuV)', 'Bacterial Blight (Xanthomonas)', 'Aphids & Sucking Pests', 'Healthy Foliage'],
+    season: 'Kharif 2026',
+    region: 'Nimar & Khandwa Belt, MP',
+    imageCount: 3,
+    annotatedCount: 3,
+    verifiedCount: 3,
+    createdAt: '2026-08-20',
+    updatedAt: '2026-09-09',
+    status: 'active',
+    author: 'Central Institute for Cotton Research (CICR) & Krishi Cluster',
+    tags: ['Sucking Pests', 'Whitefly Vector', 'Viral Phenotype', 'Field Labeled'],
+    coverImage: '/cotton_leaf_spot.svg',
+    modelAccuracyBaseline: 88.5,
+    modelRetrainedAccuracy: 94.6
+  },
+  {
+    id: 'DS-WHEAT-RUST-2026',
+    name: 'Wheat Yellow & Brown Rust Multi-Stage Benchmark',
+    description: 'Diagnostic leaf dataset covering Stripe (Yellow) Rust pustules, Powdery Mildew, and healthy canopy in irrigated wheat plots.',
+    crop: 'Wheat',
+    targetDiseases: ['Yellow Stripe Rust', 'Brown Leaf Rust', 'Powdery Mildew', 'Healthy Foliage'],
+    season: 'Rabi 2025-26',
+    region: 'Malwa & Narmadapuram Plains',
+    imageCount: 3,
+    annotatedCount: 3,
+    verifiedCount: 3,
+    createdAt: '2026-08-28',
+    updatedAt: '2026-09-06',
+    status: 'active',
+    author: 'IARI Regional Station & Krishi Vigyan Kendra',
+    tags: ['Stripe Rust', 'Pustule Detection', 'Micro-Lesions', 'Rabi Benchmark'],
+    coverImage: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=600&q=80',
+    modelAccuracyBaseline: 93.1,
+    modelRetrainedAccuracy: 97.4
+  },
+  {
+    id: 'DS-PADDY-BLAST-2026',
+    name: 'Paddy Blast & Bacterial Leaf Streak Diagnostic Set',
+    description: 'Spindle-shaped blast lesions and bacterial streak observations collected from canal command areas under high relative humidity.',
+    crop: 'Paddy / Rice',
+    targetDiseases: ['Rice Blast (Pyricularia)', 'Bacterial Leaf Blight', 'Sheath Rot', 'Healthy Foliage'],
+    season: 'Kharif 2026',
+    region: 'Chambal & Central Basin',
+    imageCount: 2,
+    annotatedCount: 2,
+    verifiedCount: 2,
+    createdAt: '2026-09-01',
+    updatedAt: '2026-09-07',
+    status: 'active',
+    author: 'Directorate of Rice Research & State Agri Dept',
+    tags: ['Blast Lesions', 'High Humidity Phenotype', 'Field Labeled'],
+    coverImage: 'https://images.unsplash.com/photo-1536657464919-892534f60d6e?auto=format&fit=crop&w=600&q=80',
+    modelAccuracyBaseline: 90.2,
+    modelRetrainedAccuracy: 95.8
+  }
+];
+
+export const INITIAL_DATASET_IMAGES: DatasetImage[] = [
+  {
+    id: 'IMG-DS-0101',
+    datasetId: 'DS-SOYBEAN-RUST-2026',
+    imageUrl: '/cotton_leaf_spot.svg',
+    cropName: 'Soybean',
+    variety: 'JS 9560',
+    diseaseLabel: 'Asian Soybean Rust',
+    pathogenType: 'fungal',
+    healthStatus: 'diseased',
+    severityPercent: 55,
+    growthStage: 'Pod / Boll Formation',
+    foliarSide: 'Abaxial (Underside)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Indore',
+      village: 'Sanwer Kalan',
+      gps: { lat: 22.9734, lng: 75.8267 }
+    },
+    capturedAt: '2026-09-07 10:30',
+    contributedBy: {
+      name: 'Ramesh Patel',
+      role: 'farmer',
+      id: 'usr-farmer-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. Anita Sharma (IISR)',
+    boundingBoxes: [
+      { id: 'box-1', x: 28, y: 35, width: 22, height: 26, label: 'Rust Pustules', confidence: 0.96 },
+      { id: 'box-2', x: 55, y: 48, width: 20, height: 24, label: 'Chlorotic Halo', confidence: 0.92 }
+    ],
+    notes: 'Brown powdery uredinia on lower foliar surface. Confirmed microscopic spore morphology.',
+    cameraInfo: 'Redmi Note 12 (Macro lens, 50MP)',
+    tags: ['Ground Truth', 'Uredinia Pustules', 'Foliar Infection']
+  },
+  {
+    id: 'IMG-DS-0102',
+    datasetId: 'DS-SOYBEAN-RUST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1592417817098-8f3d69102a47?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Soybean',
+    variety: 'JS 20-34',
+    diseaseLabel: 'Cercospora Leaf Spot',
+    pathogenType: 'fungal',
+    healthStatus: 'diseased',
+    severityPercent: 42,
+    growthStage: 'Vegetative',
+    foliarSide: 'Adaxial (Top Surface)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Indore',
+      village: 'Depalpur Rural',
+      gps: { lat: 22.8465, lng: 75.5482 }
+    },
+    capturedAt: '2026-09-06 14:15',
+    contributedBy: {
+      name: 'Suresh Verma (Field Officer)',
+      role: 'extension',
+      id: 'usr-ext-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. Anita Sharma (IISR)',
+    boundingBoxes: [
+      { id: 'box-3', x: 40, y: 30, width: 28, height: 30, label: 'Frogeye Spot', confidence: 0.94 }
+    ],
+    notes: 'Circular lesions with grey center and reddish-brown margin.',
+    cameraInfo: 'Samsung Galaxy A54 (Natural Sunlight)',
+    tags: ['Frogeye Lesion', 'Early Inception']
+  },
+  {
+    id: 'IMG-DS-0103',
+    datasetId: 'DS-SOYBEAN-RUST-2026',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/34/CSIRO_ScienceImage_7848_Aphids_on_cotton_8.jpg',
+    cropName: 'Soybean',
+    variety: 'RVS 2001-4',
+    diseaseLabel: 'Yellow Mosaic Virus',
+    pathogenType: 'viral',
+    healthStatus: 'diseased',
+    severityPercent: 68,
+    growthStage: 'Flowering',
+    foliarSide: 'Full Canopy',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Ujjain',
+      village: 'Ghatiya',
+      gps: { lat: 23.2845, lng: 75.7892 }
+    },
+    capturedAt: '2026-09-05 09:45',
+    contributedBy: {
+      name: 'Dr. Anita Sharma',
+      role: 'expert',
+      id: 'usr-expert-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. Anita Sharma (IISR)',
+    boundingBoxes: [
+      { id: 'box-4', x: 20, y: 25, width: 60, height: 50, label: 'Mosaic Chlorosis', confidence: 0.98 }
+    ],
+    notes: 'Interspersed yellow and green mosaic patches. Whitefly vector observed in field.',
+    cameraInfo: 'Sony Alpha 6400 (Macro)',
+    tags: ['Whitefly Vector', 'Viral Mosaic', 'Severe Stunting']
+  },
+  {
+    id: 'IMG-DS-0104',
+    datasetId: 'DS-SOYBEAN-RUST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Soybean',
+    variety: 'JS 9560',
+    diseaseLabel: 'Healthy Foliage',
+    pathogenType: 'healthy',
+    healthStatus: 'healthy',
+    severityPercent: 0,
+    growthStage: 'Flowering',
+    foliarSide: 'Adaxial (Top Surface)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Indore',
+      village: 'Sanwer Kalan',
+      gps: { lat: 22.9734, lng: 75.8267 }
+    },
+    capturedAt: '2026-09-08 11:00',
+    contributedBy: {
+      name: 'Ramesh Patel',
+      role: 'farmer',
+      id: 'usr-farmer-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. Anita Sharma (IISR)',
+    boundingBoxes: [
+      { id: 'box-5', x: 15, y: 15, width: 70, height: 70, label: 'Healthy Vigorous Leaf', confidence: 0.99 }
+    ],
+    notes: 'Control sample. Vigorous green coloration, no foliar blemishes, optimal chlorophyll index.',
+    cameraInfo: 'Redmi Note 12',
+    tags: ['Negative Control', 'Healthy Baseline']
+  },
+  {
+    id: 'IMG-DS-0201',
+    datasetId: 'DS-COTTON-CURL-2026',
+    imageUrl: '/cotton_leaf_spot.svg',
+    cropName: 'Cotton',
+    variety: 'Bt-2 RCH-659',
+    diseaseLabel: 'Cotton Leaf Curl Virus (CLCuV)',
+    pathogenType: 'viral',
+    healthStatus: 'diseased',
+    severityPercent: 62,
+    growthStage: 'Vegetative',
+    foliarSide: 'Full Canopy',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Khargone',
+      village: 'Barwah',
+      gps: { lat: 22.2536, lng: 76.0354 }
+    },
+    capturedAt: '2026-09-07 16:20',
+    contributedBy: {
+      name: 'Mukesh Mandloi',
+      role: 'farmer',
+      id: 'usr-farmer-02'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. K. S. Rathore (CICR)',
+    boundingBoxes: [
+      { id: 'box-6', x: 25, y: 20, width: 50, height: 55, label: 'Upward Leaf Curling & Enation', confidence: 0.95 }
+    ],
+    notes: 'Severe vein thickening with downward and upward leaf cup curling.',
+    cameraInfo: 'Realme 11 Pro (Direct Sunlight)',
+    tags: ['CLCuV', 'Enation', 'Vein Thickening']
+  },
+  {
+    id: 'IMG-DS-0202',
+    datasetId: 'DS-COTTON-CURL-2026',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/34/CSIRO_ScienceImage_7848_Aphids_on_cotton_8.jpg',
+    cropName: 'Cotton',
+    variety: 'Bollgard II',
+    diseaseLabel: 'Aphids & Sucking Pests',
+    pathogenType: 'pest',
+    healthStatus: 'pest_damaged',
+    severityPercent: 48,
+    growthStage: 'Flowering',
+    foliarSide: 'Abaxial (Underside)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Khandwa',
+      village: 'Pandhana',
+      gps: { lat: 21.7123, lng: 76.2234 }
+    },
+    capturedAt: '2026-09-06 08:30',
+    contributedBy: {
+      name: 'Vikas Solanki',
+      role: 'extension',
+      id: 'usr-ext-02'
+    },
+    verificationStatus: 'verified_by_extension',
+    verifiedBy: 'Vikas Solanki',
+    boundingBoxes: [
+      { id: 'box-7', x: 30, y: 35, width: 40, height: 35, label: 'Aphid Colony & Sooty Mould', confidence: 0.91 }
+    ],
+    notes: 'Dense nymph colonies clustered along leaf veins on the abaxial face.',
+    cameraInfo: 'OnePlus Nord CE 3',
+    tags: ['Aphis gossypii', 'Sooty Mould', 'Nymph Cluster']
+  },
+  {
+    id: 'IMG-DS-0203',
+    datasetId: 'DS-COTTON-CURL-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Cotton',
+    variety: 'Bt-2 RCH-659',
+    diseaseLabel: 'Healthy Foliage',
+    pathogenType: 'healthy',
+    healthStatus: 'healthy',
+    severityPercent: 0,
+    growthStage: 'Flowering',
+    foliarSide: 'Full Canopy',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Khargone',
+      village: 'Barwah',
+      gps: { lat: 22.2536, lng: 76.0354 }
+    },
+    capturedAt: '2026-09-07 16:45',
+    contributedBy: {
+      name: 'Mukesh Mandloi',
+      role: 'farmer',
+      id: 'usr-farmer-02'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. K. S. Rathore (CICR)',
+    boundingBoxes: [
+      { id: 'box-8', x: 20, y: 20, width: 60, height: 60, label: 'Broad Healthy Cotton Canopy', confidence: 0.98 }
+    ],
+    notes: 'Healthy control plant. Broad palmate leaves with zero curl or vein darkening.',
+    cameraInfo: 'Realme 11 Pro',
+    tags: ['Healthy Control', 'Clean Margin']
+  },
+  {
+    id: 'IMG-DS-0301',
+    datasetId: 'DS-WHEAT-RUST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Wheat',
+    variety: 'Sharbati GW-322',
+    diseaseLabel: 'Yellow Stripe Rust',
+    pathogenType: 'fungal',
+    healthStatus: 'diseased',
+    severityPercent: 60,
+    growthStage: 'Vegetative',
+    foliarSide: 'Adaxial (Top Surface)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Sehore',
+      village: 'Ashta',
+      gps: { lat: 23.0189, lng: 76.5492 }
+    },
+    capturedAt: '2026-08-30 11:15',
+    contributedBy: {
+      name: 'KVK Agronomist Team',
+      role: 'expert',
+      id: 'usr-kvk-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. R. K. Agrawal (IARI)',
+    boundingBoxes: [
+      { id: 'box-9', x: 25, y: 20, width: 50, height: 60, label: 'Linear Yellow Pustules in Stripes', confidence: 0.97 }
+    ],
+    notes: 'Characteristic bright yellow urediniospores organized in parallel rows along leaf veins.',
+    cameraInfo: 'Nikon D3500 (Field kit)',
+    tags: ['Stripe Rust', 'Puccinia striiformis', 'Linear Pustules']
+  },
+  {
+    id: 'IMG-DS-0302',
+    datasetId: 'DS-WHEAT-RUST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1592417817098-8f3d69102a47?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Wheat',
+    variety: 'HI-1544 (Purna)',
+    diseaseLabel: 'Powdery Mildew',
+    pathogenType: 'fungal',
+    healthStatus: 'diseased',
+    severityPercent: 38,
+    growthStage: 'Flowering',
+    foliarSide: 'Adaxial (Top Surface)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Hoshangabad',
+      village: 'Pipariya',
+      gps: { lat: 22.7584, lng: 78.3491 }
+    },
+    capturedAt: '2026-09-02 15:40',
+    contributedBy: {
+      name: 'Pooja Chouhan',
+      role: 'extension',
+      id: 'usr-ext-03'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. R. K. Agrawal (IARI)',
+    boundingBoxes: [
+      { id: 'box-10', x: 35, y: 30, width: 30, height: 35, label: 'White Powdery Fungal Mats', confidence: 0.93 }
+    ],
+    notes: 'Cottony white patches turning dull grey with black cleistothecia.',
+    cameraInfo: 'Motorola Edge 40',
+    tags: ['Blumeria graminis', 'Powdery Mycelium']
+  },
+  {
+    id: 'IMG-DS-0303',
+    datasetId: 'DS-WHEAT-RUST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Wheat',
+    variety: 'Sharbati GW-322',
+    diseaseLabel: 'Healthy Foliage',
+    pathogenType: 'healthy',
+    healthStatus: 'healthy',
+    severityPercent: 0,
+    growthStage: 'Flowering',
+    foliarSide: 'Full Canopy',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Sehore',
+      village: 'Ashta',
+      gps: { lat: 23.0189, lng: 76.5492 }
+    },
+    capturedAt: '2026-08-30 11:45',
+    contributedBy: {
+      name: 'KVK Agronomist Team',
+      role: 'expert',
+      id: 'usr-kvk-01'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. R. K. Agrawal (IARI)',
+    boundingBoxes: [
+      { id: 'box-11', x: 20, y: 20, width: 60, height: 60, label: 'Erect Deep Green Wheat Blades', confidence: 0.99 }
+    ],
+    notes: 'Healthy flag leaf and sub-canopy. High photosynthetic efficiency.',
+    cameraInfo: 'Nikon D3500',
+    tags: ['Control Baseline', 'Healthy Flag Leaf']
+  },
+  {
+    id: 'IMG-DS-0401',
+    datasetId: 'DS-PADDY-BLAST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1536657464919-892534f60d6e?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Paddy / Rice',
+    variety: 'Pusa Basmati 1121',
+    diseaseLabel: 'Rice Blast (Pyricularia)',
+    pathogenType: 'fungal',
+    healthStatus: 'diseased',
+    severityPercent: 52,
+    growthStage: 'Vegetative',
+    foliarSide: 'Adaxial (Top Surface)',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Balaghat',
+      village: 'Lalbarra',
+      gps: { lat: 21.9421, lng: 80.0124 }
+    },
+    capturedAt: '2026-09-04 10:10',
+    contributedBy: {
+      name: 'Ravi Dongre',
+      role: 'extension',
+      id: 'usr-ext-04'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. B. K. Jena (DRR)',
+    boundingBoxes: [
+      { id: 'box-12', x: 30, y: 35, width: 35, height: 28, label: 'Spindle-shaped Blast Lesions', confidence: 0.95 }
+    ],
+    notes: 'Elliptical diamond-shaped lesions with grey center and brownish margin.',
+    cameraInfo: 'Vivo V29',
+    tags: ['Magnaporthe oryzae', 'Diamond Lesion', 'Spindle Shape']
+  },
+  {
+    id: 'IMG-DS-0402',
+    datasetId: 'DS-PADDY-BLAST-2026',
+    imageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80',
+    cropName: 'Paddy / Rice',
+    variety: 'Kranti',
+    diseaseLabel: 'Healthy Foliage',
+    pathogenType: 'healthy',
+    healthStatus: 'healthy',
+    severityPercent: 0,
+    growthStage: 'Vegetative',
+    foliarSide: 'Full Canopy',
+    location: {
+      state: 'Madhya Pradesh',
+      district: 'Balaghat',
+      village: 'Waraseoni',
+      gps: { lat: 21.7645, lng: 80.0482 }
+    },
+    capturedAt: '2026-09-04 11:20',
+    contributedBy: {
+      name: 'Ravi Dongre',
+      role: 'extension',
+      id: 'usr-ext-04'
+    },
+    verificationStatus: 'verified_by_scientist',
+    verifiedBy: 'Dr. B. K. Jena (DRR)',
+    boundingBoxes: [
+      { id: 'box-13', x: 20, y: 20, width: 60, height: 60, label: 'Lush Healthy Tillers', confidence: 0.99 }
+    ],
+    notes: 'Unblemished tillering stage. Clean green foliage.',
+    cameraInfo: 'Vivo V29',
+    tags: ['Paddy Control', 'Healthy Tillers']
   }
 ];

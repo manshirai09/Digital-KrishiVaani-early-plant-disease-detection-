@@ -1,0 +1,146 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connection testing endpoint
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Global hardened helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity validator: User Profile
+    function isValidUser(data) {
+      return data.keys().hasAll(['id', 'name', 'role', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.role in ['farmer', 'officer', 'extension', 'expert', 'admin'] &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 120)) &&
+        (!('phone' in data) || (data.phone is string && data.phone.size() <= 20)) &&
+        (!('state' in data) || (data.state is string && data.state.size() <= 60)) &&
+        (!('district' in data) || (data.district is string && data.district.size() <= 60)) &&
+        (!('village' in data) || (data.village is string && data.village.size() <= 100)) &&
+        (!('preferredLanguage' in data) || (data.preferredLanguage is string && data.preferredLanguage.size() <= 10)) &&
+        data.createdAt is string &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // Entity validator: Scan
+    function isValidScan(data) {
+      return data.keys().hasAll(['id', 'userId', 'cropName', 'diseaseName', 'severityLevel', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId is string && isValidId(data.userId) &&
+        (request.auth == null || data.userId == request.auth.uid || data.userId.size() <= 128) &&
+        data.cropName is string && data.cropName.size() > 0 && data.cropName.size() <= 60 &&
+        data.diseaseName is string && data.diseaseName.size() > 0 && data.diseaseName.size() <= 100 &&
+        (!('pathogenType' in data) || (data.pathogenType is string && data.pathogenType.size() <= 50)) &&
+        data.severityLevel in ['low', 'moderate', 'high', 'critical'] &&
+        (!('confidence' in data) || (data.confidence is number && data.confidence >= 0 && data.confidence <= 100)) &&
+        (!('severityPercent' in data) || (data.severityPercent is number && data.severityPercent >= 0 && data.severityPercent <= 100)) &&
+        (!('sampleImageUrl' in data) || (data.sampleImageUrl is string && data.sampleImageUrl.size() <= 500)) &&
+        (!('symptoms' in data) || (data.symptoms is string && data.symptoms.size() <= 500)) &&
+        (!('notes' in data) || (data.notes is string && data.notes.size() <= 500)) &&
+        (!('status' in data) || data.status in ['active', 'in_review', 'resolved', 'escalated']) &&
+        data.createdAt is string &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // Entity validator: Farm
+    function isValidFarm(data) {
+      return data.keys().hasAll(['id', 'userId', 'name', 'totalAreaAcres', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId is string && isValidId(data.userId) &&
+        (request.auth == null || data.userId == request.auth.uid || data.userId.size() <= 128) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.totalAreaAcres is number && data.totalAreaAcres >= 0 &&
+        (!('village' in data) || (data.village is string && data.village.size() <= 100)) &&
+        (!('district' in data) || (data.district is string && data.district.size() <= 60)) &&
+        (!('state' in data) || (data.state is string && data.state.size() <= 60)) &&
+        (!('soilType' in data) || (data.soilType is string && data.soilType.size() <= 60)) &&
+        (!('overallRisk' in data) || data.overallRisk in ['low', 'moderate', 'high', 'critical']) &&
+        data.createdAt is string &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // Entity validator: Consultation
+    function isValidConsultation(data) {
+      return data.keys().hasAll(['id', 'userId', 'cropName', 'status', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId is string && isValidId(data.userId) &&
+        (request.auth == null || data.userId == request.auth.uid || data.userId.size() <= 128) &&
+        data.cropName is string && data.cropName.size() > 0 && data.cropName.size() <= 60 &&
+        data.status in ['pending', 'reviewed', 'closed'] &&
+        (!('scanId' in data) || (data.scanId is string && data.scanId.size() <= 128)) &&
+        (!('farmerName' in data) || (data.farmerName is string && data.farmerName.size() <= 100)) &&
+        (!('farmerPhone' in data) || (data.farmerPhone is string && data.farmerPhone.size() <= 20)) &&
+        (!('district' in data) || (data.district is string && data.district.size() <= 60)) &&
+        (!('expertNotes' in data) || (data.expertNotes is string && data.expertNotes.size() <= 1000)) &&
+        data.createdAt is string &&
+        (!('updatedAt' in data) || data.updatedAt is string);
+    }
+
+    // User Profile Rules
+    match /users/{userId} {
+      allow get: if isValidId(userId);
+      allow list: if true;
+      allow create: if isValidId(userId) && isValidUser(incoming()) && (request.auth == null || userId == request.auth.uid || isValidId(userId));
+      allow update: if isValidId(userId) && isValidUser(incoming()) &&
+        incoming().id == existing().id && incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(userId) && (request.auth == null || isOwner(userId));
+    }
+
+    // Crop Diagnostic Scans
+    match /scans/{scanId} {
+      allow get: if isValidId(scanId);
+      allow list: if true;
+      allow create: if isValidId(scanId) && isValidScan(incoming());
+      allow update: if isValidId(scanId) && isValidScan(incoming()) &&
+        incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(scanId) && (request.auth == null || existing().userId == request.auth.uid);
+    }
+
+    // Registered Farm Plots
+    match /farms/{farmId} {
+      allow get: if isValidId(farmId);
+      allow list: if true;
+      allow create: if isValidId(farmId) && isValidFarm(incoming());
+      allow update: if isValidId(farmId) && isValidFarm(incoming()) &&
+        incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(farmId) && (request.auth == null || existing().userId == request.auth.uid);
+    }
+
+    // Expert Consultation Tickets
+    match /consultations/{consultationId} {
+      allow get: if isValidId(consultationId);
+      allow list: if true;
+      allow create: if isValidId(consultationId) && isValidConsultation(incoming());
+      allow update: if isValidId(consultationId) && isValidConsultation(incoming()) &&
+        incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(consultationId) && (request.auth == null || existing().userId == request.auth.uid);
+    }
+  }
+}

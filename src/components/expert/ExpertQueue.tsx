@@ -14,7 +14,8 @@ import {
   Sparkles,
   MapPin,
   FlaskConical,
-  Tag
+  Tag,
+  CheckCircle2
 } from 'lucide-react';
 
 interface ExpertQueueProps {
@@ -194,7 +195,11 @@ export const ExpertQueue: React.FC<ExpertQueueProps> = ({
             const riskScore = c.diagnosis?.riskScore?.overallScore ?? c.riskScore?.overallScore ?? 50;
             const confidence = c.diagnosis?.confidence ?? c.confidence ?? 75;
             const diseaseName = c.diagnosis?.diseaseName || c.diseaseName || 'Crop Disease Observation';
-            const imageUrl = c.diagnosis?.sampleImageUrl || c.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80';
+            // Fixed image for Cotton — Cotton Leaf Spot (Cercospora) / KR-1024
+            const isCottonCercospora = c.id === 'KR-1024' || diseaseName.includes('Cercospora') || c.cropName === 'Cotton';
+            const imageUrl = isCottonCercospora 
+              ? '/TomatoYellowCurlVirus1.JPG.jpeg' 
+              : (c.diagnosis?.sampleImageUrl || c.imageUrl || '/TomatoYellowCurlVirus1.JPG.jpeg');
             const timestamp = c.dateCreated || c.timestamp || 'Today';
             const escalationReason = c.diagnosis?.escalationReason || c.escalationReason;
             const labTagId = c.labReferral?.labId || (isLabCase ? `LAB-2026-MP-${c.id.replace('KR-', '')}` : null);
@@ -213,14 +218,17 @@ export const ExpertQueue: React.FC<ExpertQueueProps> = ({
               >
                 {/* Left: Thumbnail & Details */}
                 <div className="flex items-start gap-4">
-                  <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shrink-0">
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-slate-900 border-2 border-slate-200 shadow-xs shrink-0 group">
                     <img
                       src={imageUrl}
                       alt={c.cropName}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.src = '/tomato_yellow_leaf_curl.svg';
+                      }}
                     />
-                    <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-slate-950/80 text-amber-300 text-[9px] font-mono font-bold rounded">
+                    <div className="absolute bottom-1 right-1 px-1.5 py-0.2 bg-slate-950/80 text-amber-300 text-[9px] font-mono font-bold rounded backdrop-blur-xs">
                       {confidence}% Conf
                     </div>
                   </div>

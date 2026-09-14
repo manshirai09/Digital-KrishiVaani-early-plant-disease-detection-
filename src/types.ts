@@ -152,6 +152,8 @@ export interface DiagnosisResult {
   needsExpertReview: boolean;
   escalationReason?: string;
   riskScore: MultiSourceRiskScore;
+  isOfflineScan?: boolean;
+  offlineSynced?: boolean;
   evidenceFactors: {
     label: string;
     value: string;
@@ -458,5 +460,78 @@ export interface GuidedScanStep {
   helperTip: string;
   highlightElementId?: string;
   actionRequired: 'tap_camera' | 'center_leaf' | 'confirm_clarity' | 'view_risk' | 'view_advisory';
+}
+
+// ----------------------------------------------------
+// AGRICULTURAL AI DATASET & ANNOTATION TYPES
+// ----------------------------------------------------
+export interface DatasetBoundingBox {
+  id: string;
+  x: number; // percentage 0-100
+  y: number; // percentage 0-100
+  width: number; // percentage 0-100
+  height: number; // percentage 0-100
+  label: string;
+  confidence?: number;
+}
+
+export interface DatasetImage {
+  id: string;
+  datasetId: string;
+  imageUrl: string;
+  thumbnailUrl?: string;
+  fileName?: string;
+  cropName: string;
+  variety?: string;
+  diseaseLabel: string;
+  split?: 'train' | 'val' | 'test';
+  pathogenType?: 'fungal' | 'bacterial' | 'viral' | 'pest' | 'nutrient' | 'healthy';
+  healthStatus: 'healthy' | 'diseased' | 'pest_damaged' | 'nutrient_deficient';
+  severityPercent: number; // 0 - 100
+  growthStage: 'Seedling' | 'Vegetative' | 'Flowering' | 'Pod / Boll Formation' | 'Maturity / Harvest' | string;
+  foliarSide?: 'Adaxial (Top Surface)' | 'Abaxial (Underside)' | 'Full Canopy' | 'Stem' | 'Root / Pod' | string;
+  location: {
+    state: string;
+    district: string;
+    village?: string;
+    gps?: { lat: number; lng: number };
+  };
+  capturedAt: string;
+  contributedBy: {
+    name: string;
+    role: UserRole | string;
+    id?: string;
+  };
+  verificationStatus: 'verified_by_scientist' | 'verified_by_extension' | 'ai_auto_labeled' | 'pending_review';
+  verifiedBy?: string;
+  boundingBoxes?: DatasetBoundingBox[];
+  notes?: string;
+  cameraInfo?: string;
+  tags?: string[];
+  scanCaseId?: string;
+}
+
+export interface Dataset {
+  id: string;
+  name: string;
+  code?: string;
+  description: string;
+  crop: string;
+  category?: 'Foliar Diseases' | 'Pest & Insect Damage' | 'Nutrient Deficiency' | 'Weeds' | 'Multi-Class Diagnostic' | string;
+  targetDiseases: string[];
+  season: string;
+  region: string;
+  imageCount: number;
+  annotatedCount: number;
+  verifiedCount: number;
+  createdAt: string;
+  updatedAt: string;
+  status: 'active' | 'archived' | 'retraining_ready';
+  author: string;
+  license?: string;
+  tags: string[];
+  coverImage?: string;
+  modelAccuracyBaseline?: number;
+  modelRetrainedAccuracy?: number;
 }
 

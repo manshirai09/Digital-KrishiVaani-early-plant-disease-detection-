@@ -1,0 +1,101 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for farmers, agricultural officers, extension workers, and ICAR scientists",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "role": { "type": "string", "enum": ["farmer", "officer", "extension", "expert", "admin"] },
+        "state": { "type": "string", "maxLength": 60 },
+        "district": { "type": "string", "maxLength": 60 },
+        "village": { "type": "string", "maxLength": 100 },
+        "preferredLanguage": { "type": "string", "maxLength": 10 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "role", "createdAt"]
+    },
+    "Scan": {
+      "title": "Scan",
+      "description": "Crop health and disease diagnosis scan record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "cropName": { "type": "string", "maxLength": 60 },
+        "diseaseName": { "type": "string", "maxLength": 100 },
+        "pathogenType": { "type": "string", "maxLength": 50 },
+        "confidence": { "type": "number" },
+        "severityPercent": { "type": "number" },
+        "severityLevel": { "type": "string", "enum": ["low", "moderate", "high", "critical"] },
+        "sampleImageUrl": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["active", "in_review", "resolved", "escalated"] },
+        "symptoms": { "type": "string", "maxLength": 500 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "cropName", "diseaseName", "severityLevel", "createdAt"]
+    },
+    "Farm": {
+      "title": "Farm",
+      "description": "Farmer registered land parcel and cultivation field",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "village": { "type": "string", "maxLength": 100 },
+        "district": { "type": "string", "maxLength": 60 },
+        "state": { "type": "string", "maxLength": 60 },
+        "totalAreaAcres": { "type": "number" },
+        "soilType": { "type": "string", "maxLength": 60 },
+        "overallRisk": { "type": "string", "enum": ["low", "moderate", "high", "critical"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "name", "totalAreaAcres", "createdAt"]
+    },
+    "Consultation": {
+      "title": "Consultation",
+      "description": "Scientist escalation and agronomy advisory consultation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "scanId": { "type": "string", "maxLength": 128 },
+        "cropName": { "type": "string", "maxLength": 60 },
+        "farmerName": { "type": "string", "maxLength": 100 },
+        "farmerPhone": { "type": "string", "maxLength": 20 },
+        "district": { "type": "string", "maxLength": 60 },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "closed"] },
+        "expertNotes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "cropName", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and preferences"
+    },
+    "/scans/{scanId}": {
+      "schema": { "$ref": "#/entities/Scan" },
+      "description": "Farmer crop diagnostic scans"
+    },
+    "/farms/{farmId}": {
+      "schema": { "$ref": "#/entities/Farm" },
+      "description": "Registered agricultural land plots"
+    },
+    "/consultations/{consultationId}": {
+      "schema": { "$ref": "#/entities/Consultation" },
+      "description": "Expert advisory review requests"
+    }
+  }
+}

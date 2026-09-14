@@ -36,7 +36,7 @@ export const FollowUpMonitoring: React.FC<FollowUpMonitoringProps> = ({
     initialDate: 'August 22, 2026',
     followUpDate: 'August 29, 2026 (Today)',
     treatmentApplied: 'Pseudomonas fluorescens bio-spray + targeted Azoxystrobin/Difenoconazole mist',
-    beforeImageUrl: 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=800&q=80',
+    beforeImageUrl: '/cotton_leaf_spot.svg',
     afterImageUrl: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=800&q=80',
     beforeRiskScore: 78,
     afterRiskScore: 39,

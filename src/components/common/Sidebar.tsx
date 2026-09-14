@@ -17,9 +17,6 @@ import {
   Radio,
   ShieldAlert,
   User,
-  Users,
-  Building2,
-  GraduationCap,
   ListTodo,
   Microscope,
   Map,
@@ -29,7 +26,8 @@ import {
   Flame,
   BarChart3,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  Database
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -91,9 +89,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Secondary Farmer Tools (Accessible under "More")
   const farmerSecondaryItems = [
+    { id: 'cluster-alerts', label: 'Cluster Alerts & Outbreaks', icon: ShieldAlert },
     { id: 'crop-health', label: I18nService.t('navCropHealth'), icon: HeartPulse },
     { id: 'risk-forecast', label: I18nService.t('navRiskForecast'), icon: TrendingUp },
     { id: 'scan-history', label: I18nService.t('navScanHistory'), icon: History },
+    { id: 'datasets', label: 'AI Datasets & Training', icon: Database },
     { id: 'weather-intel', label: I18nService.t('navWeatherIntel'), icon: CloudSun },
     { id: 'pest-monitoring', label: I18nService.t('navPestMonitoring'), icon: Bug },
     { id: 'iot-sensors', label: I18nService.t('navIotSensors'), icon: Radio },
@@ -128,28 +128,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             />
           </div>
         )}
-
-        {/* Role Header Info */}
-        <div className="p-3 mb-2 bg-slate-950/60 rounded-2xl border border-slate-800/80">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
-              {currentRole === 'farmer' && <User className="w-5 h-5" />}
-              {currentRole === 'extension' && <Users className="w-5 h-5" />}
-              {currentRole === 'officer' && <Building2 className="w-5 h-5" />}
-              {currentRole === 'expert' && <GraduationCap className="w-5 h-5" />}
-            </div>
-            {!isCollapsed && (
-              <div className="overflow-hidden">
-                <h3 className="text-xs font-bold text-white truncate">
-                  {currentRole === 'farmer' ? I18nService.t('authFarmer') : currentRole === 'expert' ? I18nService.t('authScientist') : currentRole === 'officer' ? I18nService.t('authDistrict') : I18nService.t('authOfficer')}
-                </h3>
-                <p className="text-[10px] text-slate-400 truncate">
-                  {currentRole === 'farmer' ? 'Digital KrishiVaani' : 'Surveillance Active'}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
 
         {/* ================= FARMER NAVIGATION ================= */}
         {currentRole === 'farmer' && (
@@ -244,13 +222,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span>VAANI Field Assistant</span>
             </button>
             <button
-              onClick={() => handleTabClick('crop-health')}
+              onClick={() => handleTabClick('cluster-alerts')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
-                activeTab === 'crop-health' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+                activeTab === 'cluster-alerts' || activeTab === 'crop-health' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
               }`}
             >
-              <HeartPulse className="w-4 h-4" />
+              <ShieldAlert className="w-4 h-4 text-rose-400" />
               <span>Cluster Alerts</span>
+            </button>
+            <button
+              onClick={() => handleTabClick('datasets')}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
+                activeTab === 'datasets' ? 'bg-sky-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              <Database className="w-4 h-4 text-emerald-400" />
+              <span>Field Datasets</span>
             </button>
           </nav>
         )}
@@ -285,6 +272,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <BarChart3 className="w-4 h-4" />
               <span>District Analytics</span>
             </button>
+            <button
+              onClick={() => handleTabClick('datasets')}
+              className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
+                activeTab === 'datasets' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              <Database className="w-4 h-4 text-emerald-400" />
+              <span>Surveillance Datasets</span>
+            </button>
           </nav>
         )}
 
@@ -308,9 +304,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
               )}
             </button>
             <button
-              onClick={() => handleTabClick('crop-scanner')}
+              id="sidebar-link-datasets"
+              onClick={() => handleTabClick('datasets')}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
+                activeTab === 'datasets' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Database className="w-4 h-4 text-emerald-400" />
+                <span>Datasets & AI Training</span>
+              </div>
+              <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 text-[10px] font-bold rounded-md border border-emerald-500/30">
+                New
+              </span>
+            </button>
+            <button
+              id="sidebar-link-model-validation"
+              onClick={() => handleTabClick('model-validation')}
               className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer text-left ${
-                activeTab === 'crop-scanner' ? 'bg-purple-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
+                (activeTab === 'model-validation' || activeTab === 'crop-scanner') ? 'bg-purple-600 text-white shadow-md' : 'text-slate-300 hover:bg-slate-800'
               }`}
             >
               <FileCheck2 className="w-4 h-4" />

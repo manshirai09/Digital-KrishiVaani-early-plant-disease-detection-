@@ -10,11 +10,12 @@ export interface ScanOptions {
   imageUrl?: string;
   farmId?: string;
   notes?: string;
+  isOffline?: boolean;
 }
 
 export async function simulateAiInference(options: ScanOptions): Promise<DiagnosisResult> {
-  // Simulate inference latency
-  await new Promise(resolve => setTimeout(resolve, 1400));
+  // Simulate inference latency (slightly faster on quantized edge)
+  await new Promise(resolve => setTimeout(resolve, options.isOffline ? 900 : 1400));
 
   const weather = StorageService.getWeather();
   const iotData = StorageService.getIotData();
@@ -22,6 +23,51 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
   const primaryTrap = pestTraps[0];
 
   const stage: CropStage = options.cropStage || 'Flowering';
+
+  // Check if Tomato Yellow Leaf Curl Virus scenario or Tomato crop requested
+  if (
+    options.scenarioId === 'scenario-tomato-curl' ||
+    options.cropName?.toLowerCase() === 'tomato' ||
+    options.imageUrl?.includes('tomato') ||
+    options.imageUrl?.includes('TomatoYellowCurlVirus')
+  ) {
+    const riskScore = computeMultiSourceRisk({
+      imageConfidence: 96,
+      imageSeverityScore: 58,
+      cropStage: stage,
+      weather,
+      iotData,
+      pestTrap: primaryTrap,
+      historicalOutbreakRisk: 82
+    });
+
+    const edgeFactor = options.isOffline
+      ? [{ label: 'Edge AI Execution', value: 'MobileNetV3 quantized on-device (0 KB network)', isConducive: true }]
+      : [];
+
+    return {
+      id: `diag-${Date.now()}`,
+      caseId: `KR-${Math.floor(1000 + Math.random() * 9000)}`,
+      diseaseName: 'Tomato Yellow Leaf Curl Virus (TYLCV)',
+      pathogenType: 'Viral',
+      confidence: 96,
+      severityPercent: 58,
+      severityLevel: 'high',
+      sampleImageUrl: options.imageUrl || '/tomato_yellow_leaf_curl.svg',
+      symptomPattern: 'Marked upward curling & cupping of leaflet margins, severe interveinal chlorosis, stunted apical growth & mottled rugose lamina',
+      isSimulated: true,
+      needsExpertReview: false,
+      riskScore,
+      isOfflineScan: options.isOffline,
+      evidenceFactors: [
+        ...edgeFactor,
+        { label: 'Leaf Morphology', value: 'Upward margin cupping & severe chlorosis (96% visual match)', isConducive: true },
+        { label: 'Insect Vector Status', value: 'Whitefly (Bemisia tabaci) pressure detected in vicinity', isConducive: true },
+        { label: 'Micro-Climate Conduciveness', value: `${weather.temperature}°C (Optimal vector transmission)`, isConducive: true },
+        { label: 'Crop Phenology', value: `${stage} Stage (High viral susceptibility)`, isConducive: true }
+      ]
+    };
+  }
 
   // Check if specific scenario requested
   if (options.scenarioId === 'scenario-b') {
@@ -36,6 +82,10 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       historicalOutbreakRisk: 70
     });
 
+    const edgeFactor = options.isOffline
+      ? [{ label: 'Edge AI Execution', value: 'MobileNetV3 quantized on-device (0 KB network)', isConducive: true }]
+      : [];
+
     return {
       id: `diag-${Date.now()}`,
       caseId: `KR-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -44,13 +94,15 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       confidence: 62,
       severityPercent: 42,
       severityLevel: 'high',
-      sampleImageUrl: options.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: options.imageUrl || '/cotton_leaf_spot.svg',
       symptomPattern: 'Ambiguous irregular chlorotic spots with atypical margin necrosis',
       isSimulated: true,
       needsExpertReview: true,
       escalationReason: 'AI Confidence (62%) is below the 75% safety threshold. Flagged for human expert review.',
       riskScore,
+      isOfflineScan: options.isOffline,
       evidenceFactors: [
+        ...edgeFactor,
         { label: 'Leaf Symptom Confidence', value: '62% (Ambiguous pattern)', isConducive: true },
         { label: 'Relative Humidity (IoT)', value: `${iotData.humidity}% (High)`, isConducive: true },
         { label: 'Leaf Wetness Duration', value: '> 8 hours', isConducive: true },
@@ -69,6 +121,10 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       historicalOutbreakRisk: 75
     });
 
+    const edgeFactor = options.isOffline
+      ? [{ label: 'Edge AI Execution', value: 'MobileNetV3 quantized on-device (0 KB network)', isConducive: true }]
+      : [];
+
     return {
       id: `diag-${Date.now()}`,
       caseId: `KR-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -77,13 +133,15 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       confidence: 87,
       severityPercent: 48,
       severityLevel: 'high',
-      sampleImageUrl: options.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: options.imageUrl || 'https://upload.wikimedia.org/wikipedia/commons/3/34/CSIRO_ScienceImage_7848_Aphids_on_cotton_8.jpg',
       symptomPattern: 'Underside foliar nymph clusters with curling & honeydew secretion',
       isSimulated: true,
       needsExpertReview: true,
       escalationReason: 'High pest density exceeding threshold + favorable thermal range',
       riskScore,
+      isOfflineScan: options.isOffline,
       evidenceFactors: [
+        ...edgeFactor,
         { label: 'Pest Colony Density', value: '87% Visual match', isConducive: true },
         { label: 'Trap Catch Rate', value: '18 insects / trap (Alert)', isConducive: true },
         { label: 'Canopy Temperature', value: `${iotData.temperature}°C (Optimal vector reproduction)`, isConducive: true }
@@ -101,6 +159,10 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       historicalOutbreakRisk: 30
     });
 
+    const edgeFactor = options.isOffline
+      ? [{ label: 'Edge AI Execution', value: 'MobileNetV3 quantized on-device (0 KB network)', isConducive: true }]
+      : [];
+
     return {
       id: `diag-${Date.now()}`,
       caseId: `KR-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -114,7 +176,9 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       isSimulated: true,
       needsExpertReview: false,
       riskScore,
+      isOfflineScan: options.isOffline,
       evidenceFactors: [
+        ...edgeFactor,
         { label: 'Vigorous Green Leaf Area', value: '88% of total canopy', isConducive: false },
         { label: 'Active Spore Activity', value: 'None detected', isConducive: false },
         { label: 'Post-Treatment Status', value: 'Significantly improved', isConducive: false }
@@ -132,6 +196,10 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       historicalOutbreakRisk: 64
     });
 
+    const edgeFactor = options.isOffline
+      ? [{ label: 'Edge AI Execution', value: 'MobileNetV3 quantized on-device (0 KB network)', isConducive: true }]
+      : [];
+
     return {
       id: `diag-${Date.now()}`,
       caseId: `KR-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -140,12 +208,14 @@ export async function simulateAiInference(options: ScanOptions): Promise<Diagnos
       confidence: 91,
       severityPercent: 34,
       severityLevel: 'moderate' as RiskLevel,
-      sampleImageUrl: options.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80',
+      sampleImageUrl: options.imageUrl || '/cotton_leaf_spot.svg',
       symptomPattern: 'Concentric reddish-brown circular spots with characteristic halo',
       isSimulated: true,
       needsExpertReview: false,
       riskScore,
+      isOfflineScan: options.isOffline,
       evidenceFactors: [
+        ...edgeFactor,
         { label: 'Leaf Symptom Pattern', value: 'Concentric target spots (91% match)', isConducive: true },
         { label: 'Current Humidity (IoT)', value: `${iotData.humidity}% RH (Conducive)`, isConducive: true },
         { label: 'Recent Rainfall', value: `${weather.rainfallLast24h} mm in last 24h`, isConducive: true },

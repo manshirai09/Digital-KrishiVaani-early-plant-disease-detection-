@@ -16,11 +16,11 @@ import {
 } from './types';
 import { StorageService } from './services/storageService';
 import { AuthService } from './services/authService';
+import { FirestoreService } from './services/firestoreService';
 import { I18nService } from './services/i18nService';
 import { Header } from './components/common/Header';
 import { Sidebar } from './components/common/Sidebar';
 import { BottomNav } from './components/common/BottomNav';
-import { OfflineBanner } from './components/common/OfflineBanner';
 import { OnboardingFlow, OnboardingStage } from './components/onboarding/OnboardingFlow';
 import { DemoControlBar } from './components/common/DemoControlBar';
 import { ArchitectureModal } from './components/common/ArchitectureModal';
@@ -50,6 +50,7 @@ import { AddCropModal } from './components/farmer/AddCropModal';
 // Expert Views
 import { ExpertQueue } from './components/expert/ExpertQueue';
 import { ExpertCaseReview } from './components/expert/ExpertCaseReview';
+import { AiModelValidation } from './components/expert/AiModelValidation';
 
 // Officer Views
 import { DistrictGisMap } from './components/officer/DistrictGisMap';
@@ -58,6 +59,13 @@ import { DistrictAnalytics } from './components/officer/DistrictAnalytics';
 
 // Extension Views
 import { ExtensionDashboard } from './components/extension/ExtensionDashboard';
+
+// Dataset & AI Retraining Views
+import { DatasetView } from './components/dataset/DatasetView';
+
+// Common Components for Offline and Cluster Alerts
+import { OfflineBanner } from './components/common/OfflineBanner';
+import { ClusterAlerts } from './components/common/ClusterAlerts';
 
 export default function App() {
   // Authentication & Session state
@@ -97,7 +105,8 @@ export default function App() {
   // Modals & Assistant states
   const [isVaaniModalOpen, setIsVaaniModalOpen] = useState(false);
   const [isGuidedScanOpen, setIsGuidedScanOpen] = useState(false);
-  const [isOffline, setIsOffline] = useState<boolean>(false);
+  const [isOffline, setIsOffline] = useState<boolean>(() => StorageService.getOfflineMode());
+  const [pendingOfflineCount, setPendingOfflineCount] = useState<number>(() => StorageService.getOfflinePendingScans().length);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [isArchModalOpen, setIsArchModalOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -114,6 +123,44 @@ export default function App() {
         I18nService.setLanguage(session.user.preferredLanguage);
       }
     }
+
+    // Listen to Firebase Auth state changes
+    const unsubscribe = FirestoreService.onAuthStateChange(fbUser => {
+      if (fbUser) {
+        FirestoreService.getUser(fbUser.uid).then(profile => {
+          if (profile) {
+            const safeRole: UserRole = profile.role === 'admin' ? 'officer' : profile.role;
+            const userObj: UserAccount = {
+              id: profile.id,
+              name: profile.name,
+              email: profile.email || '',
+              phone: profile.phone || '',
+              role: safeRole,
+              state: profile.state || 'Madhya Pradesh',
+              district: profile.district || 'Indore',
+              village: profile.village || 'Sanwer',
+              preferredLanguage: (profile.preferredLanguage as any) || 'hi',
+              voiceSettings: {
+                enabled: true,
+                rate: 0.95,
+                pitch: 1.0,
+                autoPlayVoice: true,
+                guidedModeDefault: false,
+                voiceGender: 'female'
+              },
+              createdAt: profile.createdAt
+            };
+            setCurrentUser(userObj);
+            setCurrentRole(safeRole);
+            StorageService.setCurrentRole(safeRole);
+          }
+        }).catch(err => console.warn('Firebase user sync error:', err));
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // Sync state on role change or tab change
@@ -156,7 +203,7 @@ export default function App() {
       if (['gis-map', 'outbreak-command', 'outbreak-defense', 'district-analytics', 'outbreak-analytics'].includes(targetTab)) {
         setCurrentRole('officer');
         StorageService.setCurrentRole('officer');
-      } else if (['expert-queue', 'expert-review'].includes(targetTab)) {
+      } else if (['expert-queue', 'expert-review', 'model-validation'].includes(targetTab)) {
         setCurrentRole('expert');
         StorageService.setCurrentRole('expert');
       } else if (['field-visits'].includes(targetTab)) {
@@ -173,9 +220,22 @@ export default function App() {
 
   const handleDiagnosisComplete = (diagnosis: DiagnosisResult) => {
     setActiveDiagnosis(diagnosis);
-    setCases(StorageService.getCases());
+    const updatedCases = StorageService.getCases();
+    setCases(updatedCases);
     setNotifications(StorageService.getNotifications());
     setActiveTab('diagnosis-result');
+
+    // Update pending offline scans count if offline or local edge scan
+    if (isOffline || diagnosis.isOfflineScan) {
+      setPendingOfflineCount(StorageService.getOfflinePendingScans().length);
+    }
+
+    // Cloud synchronization to Firebase Firestore
+    if (currentUser?.id && updatedCases.length > 0 && !isOffline && !diagnosis.isOfflineScan) {
+      FirestoreService.saveScan(updatedCases[0], currentUser.id).catch(err => {
+        console.info('Firebase Firestore scan sync note:', err);
+      });
+    }
   };
 
   const handleRefreshIot = () => {
@@ -189,15 +249,34 @@ export default function App() {
   };
 
   const handleToggleOffline = () => {
-    setIsOffline(prev => !prev);
+    const next = !isOffline;
+    setIsOffline(next);
+    StorageService.setOfflineMode(next);
   };
 
   const handleSyncOffline = () => {
     setIsSyncing(true);
     setTimeout(() => {
+      const synced = StorageService.syncOfflinePendingScans();
       setIsSyncing(false);
       setIsOffline(false);
+      StorageService.setOfflineMode(false);
+      setPendingOfflineCount(0);
       setCases(StorageService.getCases());
+
+      if (synced.length > 0) {
+        StorageService.addNotification({
+          id: `notif-sync-${Date.now()}`,
+          title: 'Offline Scans Synchronized',
+          message: `Successfully synchronized ${synced.length} offline scans with KrishiRakshak cloud analytics.`,
+          timestamp: 'Just now',
+          type: 'sync_status',
+          riskLevel: 'low',
+          read: false,
+          targetRole: 'farmer',
+          actionPath: 'scan-history'
+        });
+      }
       setNotifications(StorageService.getNotifications());
     }, 1200);
   };
@@ -229,6 +308,11 @@ export default function App() {
     StorageService.setCurrentRole(safeRole);
     setIsAuthModalOpen(false);
 
+    // Sync user profile to Firestore
+    FirestoreService.saveUser(user).catch(err => {
+      console.info('Firebase Firestore user sync note:', err);
+    });
+
     if (safeRole === 'farmer') setActiveTab('farmer-dashboard');
     if (safeRole === 'expert') setActiveTab('expert-queue');
     if (safeRole === 'officer') setActiveTab('gis-map');
@@ -237,6 +321,7 @@ export default function App() {
 
   const handleLogout = () => {
     AuthService.logout();
+    FirestoreService.signOut().catch(err => console.info('Firebase signOut note:', err));
     setCurrentUser(null);
     setOnboardingInitialStage('auth');
     setIsOnboardingFlowOpen(true);
@@ -280,19 +365,11 @@ export default function App() {
   return (
     <div id="krishirakshak-app-root" className="min-h-screen bg-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white relative">
       
-      {/* Offline Status Simulation Banner */}
-      <OfflineBanner
-        isOffline={isOffline}
-        onToggleOffline={handleToggleOffline}
-        pendingCount={cases.filter(c => !c.syncedWithServer).length}
-        onSync={handleSyncOffline}
-        isSyncing={isSyncing}
-      />
-
       {/* Role-Based Top Navigation Header */}
       <Header
         currentRole={currentRole}
         currentUser={currentUser}
+        activeTab={activeTab}
         onSelectRole={handleRoleChange}
         onRoleChange={handleRoleChange}
         onOpenVaani={() => setIsVaaniModalOpen(true)}
@@ -310,6 +387,15 @@ export default function App() {
         onResetDemoData={handleResetData}
         onSelectTab={tab => setActiveTab(tab)}
         onNavigate={tab => setActiveTab(tab)}
+      />
+
+      {/* Offline Connectivity & Pending Sync Banner */}
+      <OfflineBanner
+        isOffline={isOffline}
+        onToggleOffline={handleToggleOffline}
+        pendingCount={pendingOfflineCount}
+        onSync={handleSyncOffline}
+        isSyncing={isSyncing}
       />
 
       {/* Main Split Layout: Sidebar + Screen Content */}
@@ -330,7 +416,7 @@ export default function App() {
         />
 
         {/* Dynamic Viewport Container */}
-        <main className="flex-1 min-w-0 pb-16">
+        <main id="app-main-content" className="flex-1 min-w-0 pb-16">
           
           {/* ================= FARMER VIEWS ================= */}
           {currentRole === 'farmer' && (
@@ -372,11 +458,21 @@ export default function App() {
                 />
               )}
 
+              {activeTab === 'cluster-alerts' && (
+                <ClusterAlerts
+                  hotspots={hotspots}
+                  currentRole={currentRole}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
               {activeTab === 'crop-scanner' && (
                 <CropScanner
                   initialScenarioId={activeScannerScenario}
+                  isOffline={isOffline}
                   onDiagnosisComplete={handleDiagnosisComplete}
                   onNavigate={handleNavigate}
+                  onToggleOffline={handleToggleOffline}
                 />
               )}
 
@@ -473,6 +569,13 @@ export default function App() {
                   }}
                 />
               )}
+
+              {(activeTab === 'model-validation' || activeTab === 'crop-scanner') && (
+                <AiModelValidation
+                  onNavigate={handleNavigate}
+                  cases={cases}
+                />
+              )}
             </>
           )}
 
@@ -500,8 +603,16 @@ export default function App() {
                 />
               )}
 
+              {activeTab === 'cluster-alerts' && (
+                <ClusterAlerts
+                  hotspots={hotspots}
+                  currentRole={currentRole}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
               {/* Safe fallback for any unmatched officer tab */}
-              {!['gis-map', 'outbreak-command', 'outbreak-defense', 'district-analytics', 'outbreak-analytics'].includes(activeTab) && (
+              {!['gis-map', 'outbreak-command', 'outbreak-defense', 'district-analytics', 'outbreak-analytics', 'cluster-alerts', 'datasets', 'dataset-management', 'ai-datasets'].includes(activeTab) && (
                 <DistrictGisMap
                   hotspots={hotspots}
                   onNavigate={handleNavigate}
@@ -520,7 +631,50 @@ export default function App() {
                   onSwitchRole={handleRoleChange}
                 />
               )}
+
+              {(activeTab === 'cluster-alerts' || activeTab === 'crop-health') && (
+                <ClusterAlerts
+                  hotspots={hotspots}
+                  currentRole={currentRole}
+                  onNavigate={handleNavigate}
+                />
+              )}
+
+              {activeTab === 'crop-scanner' && (
+                <CropScanner
+                  initialScenarioId={activeScannerScenario}
+                  isOffline={isOffline}
+                  onDiagnosisComplete={handleDiagnosisComplete}
+                  onNavigate={handleNavigate}
+                  onToggleOffline={handleToggleOffline}
+                />
+              )}
+
+              {activeTab === 'diagnosis-result' && activeDiagnosis && (
+                <AiDiagnosisResult
+                  diagnosis={activeDiagnosis}
+                  onNavigate={handleNavigate}
+                  onSwitchRole={handleRoleChange}
+                  onRescan={() => setActiveTab('crop-scanner')}
+                />
+              )}
             </>
+          )}
+
+          {/* ================= DATASETS & AI RETRAINING VIEW ================= */}
+          {(activeTab === 'datasets' || activeTab === 'dataset-management') && (
+            <DatasetView
+              userRole={currentRole}
+              availableCases={cases}
+            />
+          )}
+
+          {/* ================= AI MODEL VALIDATION BENCH ================= */}
+          {activeTab === 'model-validation' && currentRole !== 'expert' && (
+            <AiModelValidation
+              onNavigate={handleNavigate}
+              cases={cases}
+            />
           )}
 
         </main>
@@ -591,6 +745,11 @@ export default function App() {
         onClose={() => setIsAddFarmOpen(false)}
         onFarmAdded={newFarm => {
           setFarms(StorageService.getFarms());
+          if (currentUser?.id) {
+            FirestoreService.saveFarm(newFarm, currentUser.id).catch(err => {
+              console.info('Firebase Firestore farm sync note:', err);
+            });
+          }
         }}
       />
 

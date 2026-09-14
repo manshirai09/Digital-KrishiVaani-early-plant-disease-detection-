@@ -49,7 +49,10 @@ export const ExpertCaseReview: React.FC<ExpertCaseReviewProps> = ({
   const currentRiskLevel = caseRecord.diagnosis?.riskScore?.riskLevel || caseRecord.riskScore?.riskLevel || 'high';
   const currentRiskScore = caseRecord.diagnosis?.riskScore?.overallScore ?? caseRecord.riskScore?.overallScore ?? 78;
   const currentConfidence = caseRecord.diagnosis?.confidence ?? caseRecord.confidence ?? 62;
-  const currentImageUrl = caseRecord.diagnosis?.sampleImageUrl || caseRecord.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80';
+  const isCottonCercospora = caseRecord.id === 'KR-1024' || currentDisease.includes('Cercospora') || caseRecord.cropName === 'Cotton';
+  const activeImageUrl = isCottonCercospora 
+    ? '/TomatoYellowCurlVirus1.JPG.jpeg' 
+    : (caseRecord.diagnosis?.sampleImageUrl || caseRecord.imageUrl || '/TomatoYellowCurlVirus1.JPG.jpeg');
   const currentTimestamp = caseRecord.dateCreated || caseRecord.timestamp || 'Today';
 
   const [decision, setDecision] = useState<'confirmed' | 'refined' | 'overruled' | 'lab_referral'>('confirmed');
@@ -326,19 +329,31 @@ export const ExpertCaseReview: React.FC<ExpertCaseReviewProps> = ({
               {/* Farmer Sample */}
               <div className="p-3 bg-slate-900 rounded-2xl text-white">
                 <div className="flex justify-between items-center text-[10px] text-slate-400 font-mono mb-1.5">
-                  <span>1. Farmer Camera Scan</span>
-                  <span className="text-emerald-400">1080p Clear</span>
+                  <span className="flex items-center gap-1.5">
+                    <span>1. Field Evidence Photo</span>
+                    {isCottonCercospora && (
+                      <span className="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-bold border border-emerald-500/40">
+                        Original Field Sample
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-emerald-400">1080p Field Capture</span>
                 </div>
-                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-800 group">
                   <img
-                    src={currentImageUrl}
+                    src={activeImageUrl}
                     alt="Farmer upload"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.src = '/tomato_yellow_leaf_curl.svg';
+                    }}
                   />
                   <div className="absolute inset-0 border-2 border-dashed border-amber-400/70 m-4 rounded-xl pointer-events-none" />
                 </div>
-                <span className="text-[10px] text-slate-400 mt-1 block">Concentric foliar lesions present</span>
+                <span className="text-[10px] text-slate-400 mt-1.5 block">
+                  {isCottonCercospora ? 'Field sample: foliar symptom pattern with characteristic upward leaf cupping' : 'Concentric foliar lesions present'}
+                </span>
               </div>
 
               {/* ICAR Reference Standard */}
@@ -349,7 +364,7 @@ export const ExpertCaseReview: React.FC<ExpertCaseReviewProps> = ({
                 </div>
                 <div className="relative aspect-square rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                   <img
-                    src="https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=800&q=80"
+                    src="/cotton_leaf_spot.svg"
                     alt="Reference standard"
                     className="w-full h-full object-cover"
                   />

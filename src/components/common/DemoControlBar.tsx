@@ -32,7 +32,16 @@ export const DemoControlBar: React.FC<DemoControlBarProps> = ({
   const [isExpanded, setIsExpanded] = useState(true);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  const DEMO_STEPS = [
+  interface DemoStep {
+    step: number;
+    title: string;
+    role: UserRole;
+    tab: string;
+    desc: string;
+    scenarioId?: string;
+  }
+
+  const DEMO_STEPS: DemoStep[] = [
     {
       step: 1,
       title: 'Farmer Dashboard',
@@ -49,85 +58,55 @@ export const DemoControlBar: React.FC<DemoControlBarProps> = ({
     },
     {
       step: 3,
-      title: 'AI Screening (91%)',
-      role: 'farmer' as UserRole,
-      tab: 'crop-scanner',
-      scenarioId: 'scenario-a',
-      desc: 'Simulate MobileNet/ViT inference detecting Cotton Leaf Spot at 91% confidence.'
-    },
-    {
-      step: 4,
       title: 'Multi-Source Risk Engine',
       role: 'farmer' as UserRole,
       tab: 'crop-health',
       desc: 'Fuses Leaf Image (30%) + IoT/Weather (25%) + Pest Trap (20%) + History (15%) = 78 HIGH.'
     },
     {
-      step: 5,
+      step: 4,
       title: '7-Day Risk Forecast',
       role: 'farmer' as UserRole,
       tab: 'risk-forecast',
       desc: 'Risk trajectory increasing across +1 to +3 days driven by humidity and rainfall.'
     },
     {
-      step: 6,
+      step: 5,
       title: 'Safe IPM Advisory',
       role: 'farmer' as UserRole,
       tab: 'advisory',
       desc: 'Cultural -> Biological -> Regulated Chemical guidance + multilingual audio playback.'
     },
     {
-      step: 7,
-      title: 'Low Confidence (62%) Escalation',
-      role: 'farmer' as UserRole,
-      tab: 'crop-scanner',
-      scenarioId: 'scenario-b',
-      desc: 'AI Confidence < 75% triggers safety guardrail, auto-routing case to Expert Queue.'
-    },
-    {
-      step: 8,
+      step: 6,
       title: 'Expert Validation Queue',
       role: 'expert' as UserRole,
       tab: 'expert-queue',
       desc: 'Scientist view of pending high-stakes cases with telemetry evidence.'
     },
     {
-      step: 9,
-      title: 'Expert Case Review & Approval',
-      role: 'expert' as UserRole,
-      tab: 'expert-review',
-      desc: 'Split comparison of farmer image, IoT telemetry, Confirm Diagnosis & Approve Advisory.'
-    },
-    {
-      step: 10,
-      title: 'Farmer Receives Confirmation',
-      role: 'farmer' as UserRole,
-      tab: 'advisory',
-      desc: 'Shows "Expert Confirmed ✓" badge with tailored bio-agent recommendations.'
-    },
-    {
-      step: 11,
+      step: 7,
       title: 'Before/After Follow-up Loop',
       role: 'farmer' as UserRole,
       tab: 'follow-up',
       desc: 'Post-treatment recovery image reduces risk from 78 to 39; logs to Retraining Queue.'
     },
     {
-      step: 12,
+      step: 8,
       title: 'District GIS Hotspot Map',
       role: 'officer' as UserRole,
       tab: 'gis-map',
       desc: 'Government surveillance map showing Indore cluster cases, hotspots & outbreak containment.'
     },
     {
-      step: 13,
+      step: 9,
       title: 'Outbreak Defense Command',
       role: 'officer' as UserRole,
       tab: 'outbreak-command',
       desc: 'Emergency biosecurity response, buffer zone cordons, drone spray dispatch & biocontrol mobilization.'
     },
     {
-      step: 14,
+      step: 10,
       title: 'District Analytics & Epidemiology',
       role: 'officer' as UserRole,
       tab: 'district-analytics',
@@ -166,9 +145,9 @@ export const DemoControlBar: React.FC<DemoControlBarProps> = ({
         className="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-full shadow-2xl border border-slate-700/80 text-xs font-bold hover:scale-105 transition-all cursor-pointer"
       >
         <Sparkles className="w-4 h-4 text-amber-300 animate-spin" style={{ animationDuration: '6s' }} />
-        <span>SIH 12-Step Demo Guide</span>
+        <span>SIH Demo Guide</span>
         <span className="px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] rounded-full">
-          Step {currentStepIndex + 1}/12
+          Step {currentStepIndex + 1}/{DEMO_STEPS.length}
         </span>
       </button>
     );

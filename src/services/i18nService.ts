@@ -1,6 +1,8 @@
 import { SupportedLanguageCode } from '../types';
 import { TRANSLATIONS, SUPPORTED_LANGUAGES, TranslationDictionary, LanguageMeta } from './i18n/translations';
 
+export type { SupportedLanguageCode };
+
 const STORAGE_LANG_KEY = 'krishirakshak_lang_code_v2';
 
 let currentLangCode: SupportedLanguageCode = 'en';

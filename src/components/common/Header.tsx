@@ -11,14 +11,11 @@ import {
   GraduationCap,
   Bell,
   Globe,
-  Wifi,
-  WifiOff,
   Layers,
   Sparkles,
   ChevronDown,
   RotateCcw,
   Volume2,
-  Mic,
   LogOut,
   Settings,
   LogIn,
@@ -39,6 +36,7 @@ import {
 interface HeaderProps {
   currentRole: UserRole;
   currentUser?: UserAccount | null;
+  activeTab?: string;
   onSelectRole?: (role: UserRole) => void;
   onRoleChange?: (role: UserRole) => void;
   onOpenArchitecture?: () => void;
@@ -62,6 +60,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   currentRole,
   currentUser,
+  activeTab = 'farmer-dashboard',
   onSelectRole,
   onRoleChange,
   onOpenArchitecture,
@@ -161,17 +160,6 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Quick Actions & Role Switcher */}
           <div className="flex items-center gap-2 sm:gap-2.5">
 
-            {/* 🎙️ VAANI Voice Assistant Launcher Button */}
-            <button
-              id="header-vaani-voice-btn"
-              onClick={onOpenVaani}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold shadow-sm shadow-emerald-700/25 transition-all hover:scale-105 active:scale-95 cursor-pointer"
-              title="Open VAANI Multilingual Voice Guide"
-            >
-              <Mic className="w-3.5 h-3.5 text-emerald-300 animate-pulse" />
-              <span>VAANI (वाणी)</span>
-            </button>
-
             {/* SIH Demo Walkthrough Button */}
             <button
               id="header-sih-demo-guide-btn"
@@ -193,31 +181,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Layers className="w-3.5 h-3.5 text-emerald-700" />
               <span>Architecture</span>
-            </button>
-
-            {/* Brand Assets & Logo Button */}
-            <button
-              id="header-brand-assets-btn"
-              onClick={() => setShowBrandModal(true)}
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-emerald-900 bg-emerald-50 hover:bg-emerald-100 rounded-xl border border-emerald-200/80 transition-colors cursor-pointer"
-              title="Official Digital KrishiVaani Cleaned Vector Logo & Brand Assets"
-            >
-              <Download className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Logo & Assets</span>
-            </button>
-
-            {/* Offline Simulator Switch */}
-            <button
-              id="header-offline-toggle"
-              onClick={onToggleOffline}
-              className={`p-2 rounded-xl border transition-colors cursor-pointer ${
-                isOffline
-                  ? 'bg-amber-100 border-amber-300 text-amber-800'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border-slate-200'
-              }`}
-              title={isOffline ? 'Offline Mode Active — Click to switch Online' : 'Online — Click to simulate Offline Field Mode'}
-            >
-              {isOffline ? <WifiOff className="w-4 h-4" /> : <Wifi className="w-4 h-4 text-emerald-600" />}
             </button>
 
             {/* 11 Indian Languages Dropdown Selector */}
@@ -502,17 +465,6 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <Camera className="w-4 h-4 text-emerald-700" />
                   <span>Scan My Crop (फसल स्कैन करें)</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    if (onOpenVaani) onOpenVaani();
-                    setShowHamburger(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl bg-amber-50 text-amber-950 font-extrabold text-xs transition-colors cursor-pointer text-left border border-amber-200"
-                >
-                  <Mic className="w-4 h-4 text-amber-700 animate-pulse" />
-                  <span>Ask VAANI (वाणी से बोलकर पूछें)</span>
                 </button>
 
                 <button

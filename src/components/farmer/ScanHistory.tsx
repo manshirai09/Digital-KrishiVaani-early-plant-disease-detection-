@@ -443,7 +443,7 @@ export const ScanHistory: React.FC<ScanHistoryProps> = ({
             const confidence = item.diagnosis?.confidence ?? item.confidence ?? 88;
             const diseaseTitle = item.diagnosis?.diseaseName || item.diseaseName || 'Healthy Canopy (No Disease)';
             const pathogen = item.diagnosis?.pathogenType || (diseaseTitle.includes('Spot') || diseaseTitle.includes('Blight') || diseaseTitle.includes('Rust') ? 'Fungal' : 'Physiological');
-            const imageUrl = item.diagnosis?.sampleImageUrl || item.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80';
+            const imageUrl = item.diagnosis?.sampleImageUrl || item.imageUrl || '/cotton_leaf_spot.svg';
             const dateStr = item.dateCreated || item.timestamp || '2026-08-29 09:15 AM';
             const isExpanded = expandedCaseId === item.id;
 
@@ -884,7 +884,7 @@ export const ScanHistory: React.FC<ScanHistoryProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                 <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 aspect-video">
                   <img
-                    src={inspectingCase.diagnosis?.sampleImageUrl || inspectingCase.imageUrl || 'https://images.unsplash.com/photo-1598880940371-c756e015fea1?auto=format&fit=crop&w=600&q=80'}
+                    src={inspectingCase.diagnosis?.sampleImageUrl || inspectingCase.imageUrl || '/cotton_leaf_spot.svg'}
                     alt="Scan leaf"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"

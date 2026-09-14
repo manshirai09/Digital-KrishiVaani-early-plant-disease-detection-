@@ -9,7 +9,9 @@ import {
   FieldVisit,
   FollowUpRecord,
   LabReferralDetails,
-  UserRole
+  UserRole,
+  Dataset,
+  DatasetImage
 } from '../types';
 import {
   INITIAL_FARMS,
@@ -20,7 +22,9 @@ import {
   INITIAL_HOTSPOTS,
   INITIAL_NOTIFICATIONS,
   INITIAL_FIELD_VISITS,
-  INITIAL_FOLLOW_UPS
+  INITIAL_FOLLOW_UPS,
+  INITIAL_DATASETS,
+  INITIAL_DATASET_IMAGES
 } from '../data/mockData';
 
 const STORAGE_KEYS = {
@@ -36,7 +40,9 @@ const STORAGE_KEYS = {
   OFFLINE_MODE: 'krishirakshak_offline_mode_v1',
   ROLE: 'krishirakshak_role_v1',
   LANGUAGE: 'krishirakshak_lang_v1',
-  OFFLINE_PENDING_QUEUE: 'krishirakshak_pending_offline_scans_v1'
+  OFFLINE_PENDING_QUEUE: 'krishirakshak_pending_offline_scans_v1',
+  DATASETS: 'krishirakshak_datasets_v1',
+  DATASET_IMAGES: 'krishirakshak_dataset_images_v1'
 };
 
 const notifyChange = (key: string) => {
@@ -100,7 +106,24 @@ export const StorageService = {
       return INITIAL_CASES;
     }
     try {
-      return JSON.parse(raw);
+      const parsed: CaseRecord[] = JSON.parse(raw);
+      let changed = false;
+      parsed.forEach(c => {
+        if (c.id === 'KR-1024' || (c.cropName === 'Cotton' && (c.diseaseName?.includes('Cercospora') || c.diagnosis?.diseaseName?.includes('Cercospora')))) {
+          if (c.imageUrl !== '/TomatoYellowCurlVirus1.JPG.jpeg') {
+            c.imageUrl = '/TomatoYellowCurlVirus1.JPG.jpeg';
+            changed = true;
+          }
+          if (c.diagnosis && c.diagnosis.sampleImageUrl !== '/TomatoYellowCurlVirus1.JPG.jpeg') {
+            c.diagnosis.sampleImageUrl = '/TomatoYellowCurlVirus1.JPG.jpeg';
+            changed = true;
+          }
+        }
+      });
+      if (changed) {
+        localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(parsed));
+      }
+      return parsed;
     } catch {
       return INITIAL_CASES;
     }
@@ -109,6 +132,19 @@ export const StorageService = {
   saveCases(cases: CaseRecord[]) {
     localStorage.setItem(STORAGE_KEYS.CASES, JSON.stringify(cases));
     notifyChange('cases');
+  },
+
+  updateCaseImage(caseId: string, imageUrl: string) {
+    const cases = this.getCases();
+    const target = cases.find(c => c.id === caseId);
+    if (target) {
+      target.imageUrl = imageUrl;
+      if (target.diagnosis) {
+        target.diagnosis.sampleImageUrl = imageUrl;
+      }
+      target.updatedAt = 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      this.saveCases(cases);
+    }
   },
 
   addCase(caseRecord: CaseRecord) {
@@ -402,6 +438,14 @@ export const StorageService = {
     }
   },
 
+  addFieldVisit(visit: FieldVisit): FieldVisit[] {
+    const visits = this.getFieldVisits();
+    visits.unshift(visit);
+    localStorage.setItem(STORAGE_KEYS.FIELD_VISITS, JSON.stringify(visits));
+    notifyChange('visits');
+    return visits;
+  },
+
   completeFieldVisit(visitId: string, notes: string) {
     const visits = this.getFieldVisits();
     const v = visits.find(item => item.id === visitId);
@@ -478,6 +522,196 @@ export const StorageService = {
     notifyChange('offline_queue');
   },
 
+  syncOfflinePendingScans(): any[] {
+    const pending = this.getOfflinePendingScans();
+    if (pending.length === 0) return [];
+    
+    const cases = this.getCases();
+    pending.forEach(scan => {
+      const exists = cases.some(c => c.caseId === scan.caseId);
+      if (!exists) {
+        cases.unshift({
+          id: scan.id || `case-${Date.now()}-${Math.random()}`,
+          caseId: scan.caseId || `KR-${Math.floor(1000 + Math.random() * 9000)}`,
+          farmId: 'farm-01',
+          cropName: scan.diseaseName?.includes('Soybean') ? 'Soybean' : 'Cotton',
+          diseaseName: scan.diseaseName || 'Crop Health Observation',
+          pathogenType: scan.pathogenType || 'Fungal',
+          confidence: scan.confidence || 85,
+          severityScore: scan.severityPercent || 25,
+          riskScore: scan.riskScore?.overallScore || 40,
+          status: scan.needsExpertReview ? 'needs_expert_review' : 'resolved',
+          createdAt: new Date().toISOString().split('T')[0],
+          timestamp: 'Just now (Synced from offline)',
+          imageUrl: scan.sampleImageUrl || '/cotton_leaf_spot.svg',
+          symptoms: scan.symptomPattern || 'Detected via Edge AI MobileNetV3',
+          voiceNoteText: scan.notes
+        });
+      }
+    });
+
+    this.saveCases(cases);
+    this.clearOfflinePendingScans();
+    return pending;
+  },
+
+  // Datasets Management
+  getDatasets(): Dataset[] {
+    const raw = localStorage.getItem(STORAGE_KEYS.DATASETS);
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.DATASETS, JSON.stringify(INITIAL_DATASETS));
+      return INITIAL_DATASETS;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return INITIAL_DATASETS;
+    }
+  },
+
+  saveDatasets(datasets: Dataset[]) {
+    localStorage.setItem(STORAGE_KEYS.DATASETS, JSON.stringify(datasets));
+    notifyChange('datasets');
+  },
+
+  addDataset(dataset: Dataset) {
+    const datasets = this.getDatasets();
+    datasets.unshift(dataset);
+    this.saveDatasets(datasets);
+  },
+
+  updateDataset(datasetId: string, updates: Partial<Dataset>) {
+    const datasets = this.getDatasets();
+    const index = datasets.findIndex(d => d.id === datasetId);
+    if (index !== -1) {
+      datasets[index] = { ...datasets[index], ...updates, updatedAt: new Date().toISOString().split('T')[0] };
+      this.saveDatasets(datasets);
+    }
+  },
+
+  deleteDataset(datasetId: string) {
+    const datasets = this.getDatasets().filter(d => d.id !== datasetId);
+    this.saveDatasets(datasets);
+    const images = this.getDatasetImages().filter(img => img.datasetId !== datasetId);
+    this.saveDatasetImages(images);
+  },
+
+  // Dataset Images Management
+  getDatasetImages(datasetId?: string): DatasetImage[] {
+    const raw = localStorage.getItem(STORAGE_KEYS.DATASET_IMAGES);
+    let images: DatasetImage[] = [];
+    if (!raw) {
+      localStorage.setItem(STORAGE_KEYS.DATASET_IMAGES, JSON.stringify(INITIAL_DATASET_IMAGES));
+      images = INITIAL_DATASET_IMAGES;
+    } else {
+      try {
+        images = JSON.parse(raw);
+      } catch {
+        images = INITIAL_DATASET_IMAGES;
+      }
+    }
+    if (datasetId) {
+      return images.filter(img => img.datasetId === datasetId);
+    }
+    return images;
+  },
+
+  saveDatasetImages(images: DatasetImage[]) {
+    localStorage.setItem(STORAGE_KEYS.DATASET_IMAGES, JSON.stringify(images));
+    notifyChange('dataset_images');
+  },
+
+  addImageToDataset(image: DatasetImage) {
+    const images = this.getDatasetImages();
+    images.unshift(image);
+    this.saveDatasetImages(images);
+
+    // Update dataset count
+    const datasets = this.getDatasets();
+    const dataset = datasets.find(d => d.id === image.datasetId);
+    if (dataset) {
+      dataset.imageCount = (dataset.imageCount || 0) + 1;
+      if (image.boundingBoxes && image.boundingBoxes.length > 0) {
+        dataset.annotatedCount = (dataset.annotatedCount || 0) + 1;
+      }
+      if (image.verificationStatus === 'verified_by_scientist') {
+        dataset.verifiedCount = (dataset.verifiedCount || 0) + 1;
+      }
+      dataset.updatedAt = new Date().toISOString().split('T')[0];
+      this.saveDatasets(datasets);
+    }
+
+    // Add notification
+    this.addNotification({
+      id: `notif-img-${Date.now()}`,
+      title: `Image Added to Dataset: ${dataset?.name || image.cropName}`,
+      message: `New labeled sample for ${image.diseaseLabel} (${image.cropName}) added to training archive.`,
+      timestamp: 'Just now',
+      type: 'expert_update',
+      riskLevel: 'low',
+      read: false,
+      targetRole: 'expert',
+      actionPath: 'datasets'
+    });
+  },
+
+  addBatchImagesToDataset(newImages: DatasetImage[]) {
+    if (newImages.length === 0) return;
+    const images = this.getDatasetImages();
+    const updatedImages = [...newImages, ...images];
+    this.saveDatasetImages(updatedImages);
+
+    // Recalculate counts for impacted datasets
+    const datasets = this.getDatasets();
+    datasets.forEach(ds => {
+      const dsImages = updatedImages.filter(img => img.datasetId === ds.id);
+      ds.imageCount = dsImages.length;
+      ds.annotatedCount = dsImages.filter(img => img.boundingBoxes && img.boundingBoxes.length > 0).length;
+      ds.verifiedCount = dsImages.filter(img => img.verificationStatus === 'verified_by_scientist').length;
+      ds.updatedAt = new Date().toISOString().split('T')[0];
+    });
+    this.saveDatasets(datasets);
+  },
+
+  updateDatasetImage(imageId: string, updates: Partial<DatasetImage>) {
+    const images = this.getDatasetImages();
+    const index = images.findIndex(img => img.id === imageId);
+    if (index !== -1) {
+      images[index] = { ...images[index], ...updates };
+      this.saveDatasetImages(images);
+
+      // Refresh dataset metrics
+      const datasetId = images[index].datasetId;
+      const datasets = this.getDatasets();
+      const dataset = datasets.find(d => d.id === datasetId);
+      if (dataset) {
+        const dsImages = images.filter(img => img.datasetId === datasetId);
+        dataset.annotatedCount = dsImages.filter(img => img.boundingBoxes && img.boundingBoxes.length > 0).length;
+        dataset.verifiedCount = dsImages.filter(img => img.verificationStatus === 'verified_by_scientist').length;
+        this.saveDatasets(datasets);
+      }
+    }
+  },
+
+  deleteDatasetImage(imageId: string) {
+    const images = this.getDatasetImages();
+    const target = images.find(img => img.id === imageId);
+    const filtered = images.filter(img => img.id !== imageId);
+    this.saveDatasetImages(filtered);
+
+    if (target) {
+      const datasets = this.getDatasets();
+      const dataset = datasets.find(d => d.id === target.datasetId);
+      if (dataset) {
+        const dsImages = filtered.filter(img => img.datasetId === target.datasetId);
+        dataset.imageCount = dsImages.length;
+        dataset.annotatedCount = dsImages.filter(img => img.boundingBoxes && img.boundingBoxes.length > 0).length;
+        dataset.verifiedCount = dsImages.filter(img => img.verificationStatus === 'verified_by_scientist').length;
+        this.saveDatasets(datasets);
+      }
+    }
+  },
+
   // Reset demo state
   resetAllData() {
     localStorage.setItem(STORAGE_KEYS.FARMS, JSON.stringify(INITIAL_FARMS));
@@ -491,6 +725,8 @@ export const StorageService = {
     localStorage.setItem(STORAGE_KEYS.FOLLOW_UPS, JSON.stringify(INITIAL_FOLLOW_UPS));
     localStorage.setItem(STORAGE_KEYS.OFFLINE_MODE, 'false');
     localStorage.removeItem(STORAGE_KEYS.OFFLINE_PENDING_QUEUE);
+    localStorage.setItem(STORAGE_KEYS.DATASETS, JSON.stringify(INITIAL_DATASETS));
+    localStorage.setItem(STORAGE_KEYS.DATASET_IMAGES, JSON.stringify(INITIAL_DATASET_IMAGES));
     notifyChange('reset_all');
   }
 };

@@ -4,7 +4,6 @@ import { KrishiRakshakLogo } from '../common/KrishiRakshakLogo';
 import {
   Camera,
   Mic,
-  HeartPulse,
   CloudSun,
   HelpCircle,
   ChevronRight,
@@ -13,8 +12,6 @@ import {
   VolumeX,
   Sparkles,
   ArrowRight,
-  CheckCircle2,
-  Sprout,
   ShieldCheck
 } from 'lucide-react';
 
@@ -44,7 +41,7 @@ export const TourCarouselScreen: React.FC<TourCarouselScreenProps> = ({
       desc: I18nService.t('tourStep1Desc'),
       voice: I18nService.t('tourStep1Voice'),
       icon: Camera,
-      badgeText: '1 / 5',
+      badgeText: '1 / 4',
       illustration: (
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto flex items-center justify-center">
           <div className="absolute inset-0 bg-emerald-500/10 rounded-full border-2 border-dashed border-emerald-400/40 animate-spin-slow" />
@@ -63,7 +60,7 @@ export const TourCarouselScreen: React.FC<TourCarouselScreenProps> = ({
       desc: I18nService.t('tourStep2Desc'),
       voice: I18nService.t('tourStep2Voice'),
       icon: Mic,
-      badgeText: '2 / 5',
+      badgeText: '2 / 4',
       illustration: (
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto flex items-center justify-center">
           <div className="absolute w-36 h-36 rounded-full bg-teal-500/15 animate-ping opacity-60" />
@@ -78,30 +75,11 @@ export const TourCarouselScreen: React.FC<TourCarouselScreenProps> = ({
     },
     {
       id: 'step-3',
-      title: I18nService.t('tourStep3Title'),
-      desc: I18nService.t('tourStep3Desc'),
-      voice: I18nService.t('tourStep3Voice'),
-      icon: HeartPulse,
-      badgeText: '3 / 5',
-      illustration: (
-        <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto flex items-center justify-center">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-emerald-600 to-lime-700 text-white flex items-center justify-center shadow-xl shadow-emerald-950/40 border border-emerald-400/30">
-            <Sprout className="w-14 h-14 text-emerald-100" />
-          </div>
-          <div className="absolute -bottom-2 bg-white text-emerald-900 font-extrabold text-xs px-3 py-1 rounded-full shadow-md border border-emerald-200 flex items-center gap-1.5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-            <span>{I18nService.t('cropHealthGood')}</span>
-          </div>
-        </div>
-      )
-    },
-    {
-      id: 'step-4',
       title: I18nService.t('tourStep4Title'),
       desc: I18nService.t('tourStep4Desc'),
       voice: I18nService.t('tourStep4Voice'),
       icon: CloudSun,
-      badgeText: '4 / 5',
+      badgeText: '3 / 4',
       illustration: (
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto flex items-center justify-center">
           <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-gradient-to-br from-sky-600 to-indigo-800 text-white flex items-center justify-center shadow-xl shadow-sky-950/40 border border-sky-400/30">
@@ -114,12 +92,12 @@ export const TourCarouselScreen: React.FC<TourCarouselScreenProps> = ({
       )
     },
     {
-      id: 'step-5',
+      id: 'step-4',
       title: I18nService.t('tourStep5Title'),
       desc: I18nService.t('tourStep5Desc'),
       voice: I18nService.t('tourStep5Voice'),
       icon: HelpCircle,
-      badgeText: '5 / 5',
+      badgeText: '4 / 4',
       illustration: (
         <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto flex items-center justify-center">
           <div className="p-4 rounded-3xl bg-slate-900/90 border border-emerald-500/40 shadow-2xl flex flex-col items-center justify-center">

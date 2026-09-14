@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AdvisoryPlan, CaseRecord } from '../../types';
-import { VoicePlayer } from '../common/VoicePlayer';
 import { StorageService } from '../../services/storageService';
 import {
   ShieldCheck,
@@ -118,14 +117,6 @@ export const AdvisoryView: React.FC<AdvisoryViewProps> = ({
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
-
-      {/* Multilingual Voice Advisory Audio Player */}
-      <VoicePlayer
-        text={currentAdvisory.audioAdvisoryText}
-        diseaseName={currentAdvisory.diseaseName}
-        advisoryPlan={currentAdvisory}
-        title="Voice-to-Speech Advisory Readout (किसान ऑडियो सलाहकार)"
-      />
 
       {/* Laboratory Referral In Progress Banner */}
       {isLabPending && (

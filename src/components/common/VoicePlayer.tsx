@@ -15,12 +15,16 @@ import {
   Headphones
 } from 'lucide-react';
 import { AdvisoryPlan } from '../../types';
+import { I18nService } from '../../services/i18nService';
 
-interface VoicePlayerProps {
+export interface VoicePlayerProps {
   textToSpeak?: string;
   text?: string;
+  defaultText?: string;
   language?: string;
   title?: string;
+  label?: string;
+  compact?: boolean;
   diseaseName?: string;
   advisoryPlan?: AdvisoryPlan;
 }
@@ -28,14 +32,24 @@ interface VoicePlayerProps {
 export const VoicePlayer: React.FC<VoicePlayerProps> = ({
   textToSpeak,
   text,
-  language = 'Hindi',
+  defaultText: defaultTextProp,
+  language,
   title = 'Voice Advisory Narration (Text-to-Speech)',
+  label,
+  compact = false,
   diseaseName = 'Crop Health Advisory',
   advisoryPlan
 }) => {
-  const defaultText = text || textToSpeak || 'नमस्ते किसान भाई, आपके खेत के लिए सुरक्षित एकीकृत कीट व रोग प्रबंधन परामर्श तैयार है।';
-  
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(language);
+  const getInitialLangName = () => {
+    if (language) return language;
+    const cur = I18nService.getCurrentLanguage();
+    if (cur === 'en') return 'English';
+    if (cur === 'mr') return 'Marathi';
+    if (cur === 'te') return 'Telugu';
+    return 'Hindi';
+  };
+
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(getInitialLangName());
   const [readoutMode, setReadoutMode] = useState<'summary' | 'cultural' | 'biological' | 'chemical' | 'full'>('summary');
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(0.9); // Slightly slower for clear farmer understanding
   const [isPlaying, setIsPlaying] = useState(false);
@@ -43,6 +57,24 @@ export const VoicePlayer: React.FC<VoicePlayerProps> = ({
   const [progress, setProgress] = useState(0);
   const [activeSentenceIndex, setActiveSentenceIndex] = useState<number>(0);
   const [voicesLoaded, setVoicesLoaded] = useState(false);
+
+  const defaultText = text || textToSpeak || defaultTextProp || (
+    selectedLanguage.toLowerCase().includes('en')
+      ? 'Hello farmer friend, safe integrated pest and crop health advisory is prepared for your field.'
+      : 'नमस्ते किसान भाई, आपके खेत के लिए सुरक्षित एकीकृत कीट व रोग प्रबंधन परामर्श तैयार है।'
+  );
+
+  useEffect(() => {
+    const unsub = I18nService.subscribe(langCode => {
+      if (!language) {
+        if (langCode === 'en') setSelectedLanguage('English');
+        else if (langCode === 'mr') setSelectedLanguage('Marathi');
+        else if (langCode === 'te') setSelectedLanguage('Telugu');
+        else setSelectedLanguage('Hindi');
+      }
+    });
+    return unsub;
+  }, [language]);
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const progressTimerRef = useRef<any>(null);

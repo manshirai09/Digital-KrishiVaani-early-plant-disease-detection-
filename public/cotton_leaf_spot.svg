@@ -1,0 +1,305 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" width="100%" height="100%">
+  <defs>
+    <!-- Background Cardboard/Tan surface gradient -->
+    <radialGradient id="tableBg" cx="50%" cy="45%" r="75%">
+      <stop offset="0%" stop-color="#ebe0cc"/>
+      <stop offset="45%" stop-color="#dfd1b8"/>
+      <stop offset="100%" stop-color="#cbb998"/>
+    </radialGradient>
+
+    <!-- Subtle texture pattern for cardboard -->
+    <filter id="surfaceGrain" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.85  0 0 0 0 0.78  0 0 0 0 0.65  0 0 0 0.08 0" result="coloredNoise"/>
+      <feComposite in2="SourceGraphic" in="coloredNoise" operator="in"/>
+    </filter>
+
+    <!-- Leaf drop shadow on table -->
+    <filter id="leafShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="8" dy="18" stdDeviation="16" flood-color="#54432d" flood-opacity="0.45"/>
+    </filter>
+
+    <!-- Leaf green color gradients -->
+    <linearGradient id="leafBaseGrad" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" stop-color="#3d7e35"/>
+      <stop offset="35%" stop-color="#326c2b"/>
+      <stop offset="70%" stop-color="#2a5c24"/>
+      <stop offset="100%" stop-color="#224b1d"/>
+    </linearGradient>
+
+    <radialGradient id="leafCenterGlow" cx="50%" cy="58%" r="45%">
+      <stop offset="0%" stop-color="#488f3e" stop-opacity="0.7"/>
+      <stop offset="60%" stop-color="#326c2b" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#1f441a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Petiole Stem Gradient -->
+    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#557a36"/>
+      <stop offset="40%" stop-color="#88b55e"/>
+      <stop offset="80%" stop-color="#699443"/>
+      <stop offset="100%" stop-color="#44632a"/>
+    </linearGradient>
+
+    <!-- Spot Styles -->
+    <!-- Large Target Spot (Alternaria/Cercospora concentric ring) -->
+    <radialGradient id="targetSpotGrad">
+      <stop offset="0%" stop-color="#9a764d"/>
+      <stop offset="25%" stop-color="#724d27"/>
+      <stop offset="50%" stop-color="#9c7850"/>
+      <stop offset="78%" stop-color="#542517"/>
+      <stop offset="92%" stop-color="#3a110a"/>
+      <stop offset="100%" stop-color="#808c35" stop-opacity="0.6"/>
+    </radialGradient>
+
+    <!-- Dark Necrotic Spot with Chlorotic Halo -->
+    <radialGradient id="necroticSpotGrad">
+      <stop offset="0%" stop-color="#5c381c"/>
+      <stop offset="55%" stop-color="#401e10"/>
+      <stop offset="82%" stop-color="#2a0d06"/>
+      <stop offset="100%" stop-color="#8c9938" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- Shot Hole center (punched through leaf to table) -->
+    <radialGradient id="shotHoleGrad">
+      <stop offset="0%" stop-color="#cbb998"/>
+      <stop offset="60%" stop-color="#dfd1b8"/>
+      <stop offset="80%" stop-color="#421a0f"/>
+      <stop offset="100%" stop-color="#260b04"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 1. Background (Cardboard / Wood Grain Table) -->
+  <rect width="1000" height="750" fill="url(#tableBg)" />
+  
+  <!-- Subtle wood/cardboard fibrous grain lines -->
+  <g opacity="0.12" stroke="#6d5431" stroke-width="1.2">
+    <line x1="0" y1="120" x2="1000" y2="125" stroke-dasharray="120,40,200,60" />
+    <line x1="0" y1="240" x2="1000" y2="242" stroke-dasharray="280,70,150,50" />
+    <line x1="0" y1="390" x2="1000" y2="385" stroke-dasharray="90,30,320,80" />
+    <line x1="0" y1="510" x2="1000" y2="515" stroke-dasharray="210,60,180,40" />
+    <line x1="0" y1="640" x2="1000" y2="638" stroke-dasharray="150,50,260,90" />
+  </g>
+
+  <!-- 2. Cotton Leaf & Shadow Assembly -->
+  <g id="cotton-leaf-assembly" filter="url(#leafShadow)">
+    
+    <!-- Curved Petiole Stem -->
+    <path d="M 495,570 C 492,620 482,670 472,720 C 478,721 486,720 488,719 C 500,665 508,615 508,570 Z" 
+          fill="url(#stemGrad)" />
+
+    <!-- Cotton Leaf Blade (Gossypium hirsutum 5-lobed palmate structure) -->
+    <path id="leaf-blade"
+          d="M 500,570
+             C 450,575 390,560 345,525
+             C 310,498 285,455 260,440
+             C 245,432 230,436 215,448
+             C 195,430 185,395 190,360
+             C 196,315 225,280 270,250
+             C 320,215 375,225 410,250
+             C 425,210 445,150 470,105
+             C 485,78 500,60 508,60
+             C 515,60 530,78 545,105
+             C 570,150 590,210 605,250
+             C 640,225 695,215 745,250
+             C 790,280 818,315 824,360
+             C 830,395 818,430 798,448
+             C 782,436 768,432 752,440
+             C 728,455 702,498 668,525
+             C 622,560 562,575 500,570 Z"
+          fill="url(#leafBaseGrad)" />
+
+    <!-- Leaf Highlights and Shading Overlay -->
+    <path d="M 500,570
+             C 450,575 390,560 345,525
+             C 310,498 285,455 260,440
+             C 245,432 230,436 215,448
+             C 195,430 185,395 190,360
+             C 196,315 225,280 270,250
+             C 320,215 375,225 410,250
+             C 425,210 445,150 470,105
+             C 485,78 500,60 508,60
+             C 515,60 530,78 545,105
+             C 570,150 590,210 605,250
+             C 640,225 695,215 745,250
+             C 790,280 818,315 824,360
+             C 830,395 818,430 798,448
+             C 782,436 768,432 752,440
+             C 728,455 702,498 668,525
+             C 622,560 562,575 500,570 Z"
+          fill="url(#leafCenterGlow)" />
+
+    <!-- 3. Primary Leaf Veins (Palmate Pattern radiating from petiole junction at 502,560) -->
+    <g stroke="#719e48" stroke-linecap="round" opacity="0.85">
+      <!-- Central Main Vein to Top Apex -->
+      <path d="M 502,560 C 503,420 505,250 508,70" stroke-width="5" fill="none"/>
+      <!-- Left Main Vein to Left Lobe Apex -->
+      <path d="M 502,560 C 430,470 330,370 205,345" stroke-width="4.2" fill="none"/>
+      <!-- Right Main Vein to Right Lobe Apex -->
+      <path d="M 502,560 C 575,470 680,370 808,345" stroke-width="4.2" fill="none"/>
+      <!-- Lower Left Basal Vein -->
+      <path d="M 502,560 C 430,545 340,510 270,445" stroke-width="3" fill="none"/>
+      <!-- Lower Right Basal Vein -->
+      <path d="M 502,560 C 575,545 670,510 742,445" stroke-width="3" fill="none"/>
+    </g>
+
+    <!-- 4. Secondary Branching Veins Network -->
+    <g stroke="#60873a" stroke-linecap="round" opacity="0.65" stroke-width="1.8" fill="none">
+      <!-- Central Lobe secondary veins -->
+      <path d="M 504,490 C 465,455 435,435 410,410"/>
+      <path d="M 505,490 C 545,455 575,435 605,410"/>
+      <path d="M 505,420 C 460,380 438,350 415,310"/>
+      <path d="M 506,420 C 550,380 572,350 595,310"/>
+      <path d="M 506,340 C 470,295 450,250 435,210"/>
+      <path d="M 507,340 C 540,295 560,250 575,210"/>
+      <path d="M 507,250 C 485,210 472,175 465,140"/>
+      <path d="M 507,250 C 525,210 538,175 545,140"/>
+      <path d="M 508,170 C 495,145 488,115 482,90"/>
+      <path d="M 508,170 C 518,145 525,115 530,90"/>
+
+      <!-- Left Lobe secondary veins -->
+      <path d="M 440,500 C 390,470 350,440 315,400"/>
+      <path d="M 390,450 C 340,415 295,370 255,320"/>
+      <path d="M 330,390 C 290,340 250,290 220,270"/>
+      <path d="M 270,360 C 240,320 215,290 195,280"/>
+      <path d="M 430,480 C 420,430 405,380 395,330"/>
+      <path d="M 360,430 C 355,380 345,340 335,290"/>
+
+      <!-- Right Lobe secondary veins -->
+      <path d="M 570,500 C 620,470 660,440 695,400"/>
+      <path d="M 620,450 C 670,415 715,370 755,320"/>
+      <path d="M 680,390 C 720,340 760,290 790,270"/>
+      <path d="M 740,360 C 770,320 795,290 815,280"/>
+      <path d="M 580,480 C 590,430 605,380 615,330"/>
+      <path d="M 650,430 C 655,380 665,340 675,290"/>
+    </g>
+
+    <!-- 5. Alternaria & Cercospora Brown Lesions (Matching uploaded user leaf pattern) -->
+    <g id="leaf-lesions">
+      
+      <!-- Major Target Spot Lesion A (Upper left blade - 340, 280) -->
+      <g transform="translate(345, 275)">
+        <ellipse cx="0" cy="0" rx="26" ry="24" fill="url(#targetSpotGrad)" />
+        <ellipse cx="1" cy="-1" rx="19" ry="17" fill="none" stroke="#48180c" stroke-width="2.5" />
+        <ellipse cx="2" cy="-2" rx="12" ry="10" fill="none" stroke="#683416" stroke-width="2" />
+        <circle cx="2" cy="-2" r="5" fill="#a48358" />
+        <!-- Micro Shot Hole Center -->
+        <circle cx="1" cy="-2" r="2.8" fill="url(#shotHoleGrad)" />
+      </g>
+
+      <!-- Major Target Spot Lesion B (Central blade right - 565, 360) -->
+      <g transform="translate(565, 360)">
+        <ellipse cx="0" cy="0" rx="30" ry="26" fill="url(#targetSpotGrad)" />
+        <ellipse cx="-1" cy="2" rx="22" ry="19" fill="none" stroke="#3b1207" stroke-width="3" />
+        <ellipse cx="-2" cy="1" rx="14" ry="12" fill="none" stroke="#622e15" stroke-width="2.2" />
+        <circle cx="-2" cy="1" r="6" fill="#8f6e46" />
+        <ellipse cx="-1.5" cy="1" rx="3.5" ry="3" fill="url(#shotHoleGrad)" />
+      </g>
+
+      <!-- Major Target Spot Lesion C (Left lobe apex cluster - 250, 335) -->
+      <g transform="translate(250, 335)">
+        <ellipse cx="0" cy="0" rx="22" ry="20" fill="url(#targetSpotGrad)" />
+        <ellipse cx="1" cy="1" rx="15" ry="13" fill="none" stroke="#42140a" stroke-width="2.2" />
+        <circle cx="1" cy="1" r="5" fill="#9c7a52" />
+      </g>
+
+      <!-- Major Target Spot Lesion D (Right upper blade - 635, 270) -->
+      <g transform="translate(635, 270)">
+        <ellipse cx="0" cy="0" rx="25" ry="22" fill="url(#targetSpotGrad)" />
+        <ellipse cx="0" cy="1" rx="17" ry="15" fill="none" stroke="#3e1308" stroke-width="2.5" />
+        <circle cx="0" cy="1" r="7" fill="#8d6840" />
+      </g>
+
+      <!-- Prominent Lesion E (Lower central blade - 460, 440) -->
+      <g transform="translate(460, 440)">
+        <ellipse cx="0" cy="0" rx="24" ry="21" fill="url(#targetSpotGrad)" />
+        <ellipse cx="-1" cy="0" rx="16" ry="14" fill="none" stroke="#45170b" stroke-width="2.4" />
+        <circle cx="-1" cy="0" r="6" fill="#947148" />
+        <circle cx="-0.5" cy="0" r="2.5" fill="url(#shotHoleGrad)" />
+      </g>
+
+      <!-- Prominent Lesion F (Center apex lobe - 490, 195) -->
+      <g transform="translate(490, 195)">
+        <ellipse cx="0" cy="0" rx="20" ry="18" fill="url(#targetSpotGrad)" />
+        <ellipse cx="0" cy="0" rx="13" ry="11" fill="none" stroke="#421408" stroke-width="2" />
+        <circle cx="0" cy="0" r="5" fill="#88623a" />
+      </g>
+
+      <!-- Prominent Lesion G (Right lower lobe margin - 710, 445) -->
+      <g transform="translate(710, 445)">
+        <ellipse cx="0" cy="0" rx="24" ry="20" fill="url(#targetSpotGrad)" />
+        <ellipse cx="1" cy="0" rx="16" ry="13" fill="none" stroke="#3b1106" stroke-width="2.2" />
+        <circle cx="1" cy="0" r="6" fill="#926f46" />
+      </g>
+
+      <!-- Prominent Lesion H (Left lower lobe - 325, 475) -->
+      <g transform="translate(325, 475)">
+        <ellipse cx="0" cy="0" rx="21" ry="18" fill="url(#targetSpotGrad)" />
+        <ellipse cx="0" cy="0" rx="14" ry="12" fill="none" stroke="#48180c" stroke-width="2" />
+        <circle cx="0" cy="0" r="5" fill="#8c663e" />
+      </g>
+
+      <!-- Mid-size & Secondary Necrotic Lesions (Scattered matching photo) -->
+      <!-- Left Upper Lobe -->
+      <ellipse cx="295" cy="225" rx="14" ry="12" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="230" cy="285" rx="16" ry="14" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="215" cy="380" rx="15" ry="13" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="280" cy="390" rx="13" ry="11" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="370" cy="335" rx="16" ry="15" fill="url(#necroticSpotGrad)" />
+
+      <!-- Center Lobe -->
+      <ellipse cx="535" cy="145" rx="15" ry="13" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="465" cy="140" rx="12" ry="10" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="525" cy="240" rx="17" ry="15" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="440" cy="260" rx="16" ry="14" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="480" cy="315" rx="18" ry="16" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="520" cy="390" rx="16" ry="14" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="420" cy="395" rx="15" ry="13" fill="url(#necroticSpotGrad)" />
+
+      <!-- Right Lobe -->
+      <ellipse cx="585" cy="210" rx="14" ry="12" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="690" cy="235" rx="16" ry="14" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="760" cy="305" rx="17" ry="15" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="715" cy="350" rx="16" ry="14" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="645" cy="350" rx="15" ry="13" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="785" cy="375" rx="13" ry="11" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="640" cy="430" rx="17" ry="15" fill="url(#necroticSpotGrad)" />
+      <ellipse cx="590" cy="470" rx="14" ry="12" fill="url(#necroticSpotGrad)" />
+
+      <!-- Basal & Margin Small Necrotic Punctures -->
+      <circle cx="370" cy="510" r="9" fill="url(#necroticSpotGrad)" />
+      <circle cx="430" cy="525" r="8" fill="url(#necroticSpotGrad)" />
+      <circle cx="530" cy="520" r="9" fill="url(#necroticSpotGrad)" />
+      <circle cx="560" cy="535" r="7" fill="url(#necroticSpotGrad)" />
+      <circle cx="645" cy="505" r="8" fill="url(#necroticSpotGrad)" />
+      <circle cx="260" cy="460" r="8" fill="url(#necroticSpotGrad)" />
+      <circle cx="495" cy="95" r="7" fill="url(#necroticSpotGrad)" />
+      <circle cx="505" cy="115" r="6" fill="url(#necroticSpotGrad)" />
+
+      <!-- Micro Freckles / Early Stage Lesions (2-4mm) -->
+      <g fill="#42170b" opacity="0.85">
+        <circle cx="310" cy="320" r="4.5"/>
+        <circle cx="340" cy="230" r="4"/>
+        <circle cx="395" cy="280" r="5"/>
+        <circle cx="410" cy="220" r="4"/>
+        <circle cx="455" cy="350" r="5"/>
+        <circle cx="480" cy="270" r="4.5"/>
+        <circle cx="540" cy="310" r="5"/>
+        <circle cx="580" cy="285" r="4.5"/>
+        <circle cx="610" cy="315" r="5"/>
+        <circle cx="670" cy="290" r="4.5"/>
+        <circle cx="735" cy="390" r="5"/>
+        <circle cx="675" cy="410" r="4.5"/>
+        <circle cx="525" cy="455" r="5"/>
+        <circle cx="475" cy="485" r="4.5"/>
+        <circle cx="390" cy="470" r="4"/>
+      </g>
+    </g>
+
+    <!-- Faint Chlorotic Yellowish Senescence Margin at leaf edges -->
+    <path d="M 215,448 C 195,430 185,395 190,360 C 196,315 225,280 270,250"
+          stroke="#9db83d" stroke-width="3" fill="none" opacity="0.35" />
+    <path d="M 798,448 C 818,430 830,395 824,360 C 818,315 790,280 745,250"
+          stroke="#9db83d" stroke-width="3" fill="none" opacity="0.35" />
+  </g>
+</svg>
