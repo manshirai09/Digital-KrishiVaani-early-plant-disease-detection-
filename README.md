@@ -54,6 +54,12 @@ The goal is to transform complex agricultural information into **simple, actiona
 
 ---
 
+
+
+**DIGITAL KRISHIVAANI WEBSITE LINK - https://digitalkrishivaani.ai.studio/
+**
+
+
 ## 🎯 Key Features
 
 ### 1. 📷 Crop Health Scanner
